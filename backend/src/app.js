@@ -1,9 +1,11 @@
-const express = require('express');
+import express from 'express';
+import sessionMiddleware from './middleware/session.js';
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
+app.use(express.json());
+app.use(sessionMiddleware());
+
+app.use('/api/auth', require('./routes/auth-router'));
 
 export default app;
