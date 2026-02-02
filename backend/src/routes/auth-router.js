@@ -1,8 +1,8 @@
 import express from 'express';
 
-const router = express.Router();
+const auth_router = express.Router();
 
-router.post('/login', (req, res) => {
+auth_router.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     if (email === 'ewgen' && password === 'bro') {
@@ -14,3 +14,5 @@ router.post('/login', (req, res) => {
         res.status(401).json({ message: 'Invalid credentials' });
     }
 })
+
+export default auth_router;
