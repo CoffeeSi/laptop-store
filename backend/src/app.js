@@ -1,9 +1,10 @@
-const express = require('express');
+import router from '../routes/review-routes.js';
+import express from "express"
+const app = express()
+app.use(express.json())
 
-const app = express();
+app.use('/', router)
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
+
 
 export default app;
