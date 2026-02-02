@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import session from "express-session";
 import MongoStore from 'connect-mongo';
 
@@ -9,8 +12,8 @@ function sessionMiddleware() {
         saveUninitialized: false,
 
         store: MongoStore.create({
-            uri: process.env.MONGO_URI,
-            collection: 'sessions'
+            mongoUrl: process.env.MONGO_URI,
+            collectionName: 'sessions'
         }),
 
         cookie: {
