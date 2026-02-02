@@ -1,7 +1,7 @@
 import {Router} from "express"
 
-const router = Router()
-router.post("/ping/reviews", async (req,res)=>{
+const review_router = Router()
+review_router.post("/ping/reviews", async (req,res)=>{
 
     const newReview = new Reviews({
 
@@ -33,4 +33,4 @@ router.post("/ping/reviews", async (req,res)=>{
 
 // })
 
-export default router
+export default review_router;

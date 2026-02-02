@@ -1,16 +1,17 @@
 import express from 'express';
 import sessionMiddleware from './middleware/session.js';
-import router from '../routes/review-routes.js';
-import express from "express"
+import review_router from './routes/review-routes.js';
+import auth_router from './routes/auth-router.js';
+
 const app = express()
 app.use(express.json())
 
-app.use('/', router)
+app.use('/', review_router)
 
 
 app.use(express.json());
 app.use(sessionMiddleware());
 
-app.use('/api/auth', require('./routes/auth-router'));
+app.use('/api/auth', auth_router);
 
 export default app;
