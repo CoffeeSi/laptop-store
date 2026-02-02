@@ -1,7 +1,12 @@
 import express from 'express';
 import sessionMiddleware from './middleware/session.js';
+import router from '../routes/review-routes.js';
+import express from "express"
+const app = express()
+app.use(express.json())
 
-const app = express();
+app.use('/', router)
+
 
 app.use(express.json());
 app.use(sessionMiddleware());
