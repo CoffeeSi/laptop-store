@@ -4,9 +4,11 @@ const laptops_schema = mongoose.Schema({
 
     model_name : {type : String, required :true},
     price : {type : Number, required : true},
-    specifications : {type : [{ cpu : {type : String, required : true}, ram : {type : String, required : true}, storage : {type : String, required : true}, gpu : {type : String, required : true}}], required : true},
+    specifications: {cpu: { type: String, required: true }, ram: { type: String, required: true }, storage: { type: String, required: true }, gpu: { type: String, required: true }},
     stock_quantity : {type : Number, required : true},
-    brand_id : {type : mongoose.Types.ObjectId, required : true, ref : "Brands"}
+    brand_id : {type : mongoose.Types.ObjectId, required : true, ref : "Brands"},
+    imgUrl : {type : String, default : "https://sm.pcmag.com/pcmag_me/review/h/hp-victus-/hp-victus-16-2023_k6e9.jpg"}
+    
 })
 
 const Laptop = mongoose.model("Laptops", laptops_schema)

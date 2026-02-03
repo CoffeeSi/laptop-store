@@ -5,12 +5,19 @@ export const validateLaptopData = (data) => {
 
     const {model_name, price, specifications, stock_quantity, brand_id} = data
 
-    if (!model_name || price == undefined || price < 0 || !brand_id) return false
+    if (!model_name || price == undefined || price < 0 || !brand_id) {
+        console.log("name?")
+        return false}
 
-    if(!Array.isArray(specifications) || specifications.length === 0 )return false
+    if(!specifications ){
+        
+        console.log("specification")
+        return false}
 
     if (stock_quantity == undefined || stock_quantity < 0) return false
-
-    if (!mongoose.Types.ObjectId.isValid(brand_id)) return false;
+        
+    if (!mongoose.Types.ObjectId.isValid(brand_id)) {
+            console.log("id")
+        return false};
     return true
 }

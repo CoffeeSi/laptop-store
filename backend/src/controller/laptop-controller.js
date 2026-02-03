@@ -6,9 +6,9 @@ export const addLaptop = async (req,res,next)=>{
     try{
 
         const isValid = validateLaptopData(req.body)
-        if (!isValid) return res.status(400).json({message : "bad data"})
+        if (!isValid) return res.status(400).json({message : "bad data LAPTOP"})
 
-        const {model_name, price, specifications, stock_quantity, brand_id} = req.body 
+        const {model_name, price, specifications, stock_quantity, brand_id, imgUrl} = req.body 
 
         const newLaptop = new Laptop({model_name, price, specifications, stock_quantity, brand_id})
 
@@ -48,16 +48,17 @@ export const patchLaptop = async(req,res,next) =>{
 
     try{
         const id = req.params.id
-        const {model_name, price, specifications, stock_quantity, brand_id} = req.body
+        const {model_name, price, specifications, stock_quantity, brand_id, imgUrl} = req.body
 
 
         const updatedData = {}
 
         if (model_name) updatedData.model_name = model_name
         if (price !== undefined) updatedData.price = price
-        if (specifications && specifications.length !==0) updatedData.specifications = specifications
+        if (specifications) updatedData.specifications = specifications
         if (stock_quantity !== undefined) updatedData.stock_quantity = stock_quantity
         if (brand_id) updatedData.brand_id = brand_id
+        if (imgUrl) updatedData.imgUrl = imgUrl
         const laptop = await Laptop.findByIdAndUpdate(id, updatedData, {new : true, runValidators : true})
         if (!laptop){
             return res.status(404).json({message : "Laptop not found"})
