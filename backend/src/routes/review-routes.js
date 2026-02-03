@@ -17,20 +17,5 @@ review_router.post("/ping/reviews", async (req,res)=>{
 
 })
 
-// router.post("/ping/customer", async (req,res)=>{
-
-//     const newCustomer = new Customer({
-
-//         full_name : req.body.full_name,
-//         email : req.body.email,
-//         phone : req.body.phone,
-//         address : req.body.address
-
-//     })
-//     await newCustomer.save()
-
-//     res.send(newCustomer)
-
-// })
 
 export default review_router;
