@@ -20,10 +20,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-<<<<<<< HEAD
-=======
     "bcryptjs": "^3.0.3",
->>>>>>> 0efc8df41287402e7f1972b5d82ac0729e14cb6d
     "connect-mongo": "^6.0.0",
     "connect-mongodb-session": "^5.0.0",
     "dotenv": "^17.2.3",
