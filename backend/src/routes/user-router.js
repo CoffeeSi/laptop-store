@@ -4,7 +4,7 @@ import { validateId } from "../middleware/validate-id"
 const router = Router()
 
 //GET
-router.get("/users/", getUsers)
+router.get("/users", getUsers)
 router.get("/users/:id", validateId, getUserById)
 
 //PATCH

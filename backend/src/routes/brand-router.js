@@ -6,10 +6,10 @@ import {validateId} from "../middleware/validate-id"
 const router = Router()
 
 //POST
-router.post("/brands/", addBrand)
+router.post("/brands", addBrand)
 
 //GET
-router.get("/brands/", getBrands)
+router.get("/brands", getBrands)
 router.get("/users/:id", validateId, getBrandById)
 
 //PATCH
