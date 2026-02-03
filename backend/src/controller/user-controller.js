@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import User from "./models/user-model.js"
+import User from "./model/user-model.js"
 import { isValidEmail, isValidPhone } from "../utils/validation.js"
 
 //add_user валидация присутствует
@@ -59,7 +59,7 @@ export const patchUser = async(req,res,next)=>{
         if (!user){
             return res.status(404).json({message : "User not found"})
         }
-        res.status(200).json(user)
+        return res.status(200).json(user)
     }catch(err){
 
         next(err)
@@ -78,7 +78,7 @@ export const getUsers = async(req,res,next)=>{
 }
 
 //юзер по айди айди не прилетает БЕРЕТСЯ ИЗ ЗАПРОСА валидация присутствует
-export const getUsersById = async(req,res,next)=>{
+export const getUserById = async(req,res,next)=>{
     try{
         const id = req.params.id
 
