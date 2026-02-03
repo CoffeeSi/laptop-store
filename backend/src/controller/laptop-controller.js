@@ -72,7 +72,7 @@ export const patchLaptop = async(req,res,next) =>{
 
 export const getLaptops = async(req,res,next)=>{
     try{
-    const laptops = await Laptop.find({})
+    const laptops = await Laptop.find({}).populate("brand_id")
     return res.status(200).json(laptops)
     }catch(err){
         next(err)
