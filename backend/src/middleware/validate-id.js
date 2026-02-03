@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import Brand from "./model/brand-model.js"
+import Brand from "../model/brand-model.js"
 export const validateId = (req,res,next)=>{
 
     const {id} = req.params
@@ -11,8 +11,8 @@ export const validateId = (req,res,next)=>{
 }
 
 export const brandExists = async (req,res,next)=>{
+    const { brand_id} = req.body
 
-    if (!brand_name) return res.status(400).json({message : "bad brand_name"})
     if (!mongoose.isValidObjectId(brand_id)) {
         return res.status(400).json({ message: "invalid brand id" })
     }

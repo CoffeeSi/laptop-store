@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import Brand from "./model/brand-model.js"
+import Brand from "../model/brand-model.js"
 
 export const addBrand = async (req, res, next) =>{
 
