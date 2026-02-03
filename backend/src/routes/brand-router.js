@@ -3,17 +3,19 @@ import {Router} from "express"
 import {addBrand, deleteBrand, patchBrand, getBrands, getBrandById} from "../controller/brands-controller.js"
 import {validateId} from "../middleware/validate-id.js"
 
-const router = Router()
+const brand_router = Router()
 
 //POST
-router.post("/brands", addBrand)
+brand_router.post("/brands", addBrand)
 
 //GET
-router.get("/brands", getBrands)
-router.get("/users/:id", validateId, getBrandById)
+brand_router.get("/brands", getBrands)
+brand_router.get("/users/:id", validateId, getBrandById)
 
 //PATCH
-router.patch("/users/:id", validateId, patchBrand)
+brand_router.patch("/users/:id", validateId, patchBrand)
 
 //DELETE
-router.delete("/users/:id", validateId, deleteBrand)
+brand_router.delete("/users/:id", validateId, deleteBrand)
+
+export default brand_router

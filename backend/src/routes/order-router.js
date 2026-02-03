@@ -1,10 +1,10 @@
 import { Router } from "express"
-import { addOrder, getOrders } from "../controller/order-controller.js"
+import { addOrder, getOrders } from "../controller/orders-controller.js"
 import { validateId } from "../middleware/validate-id.js"
 
-const router = Router()
+const order_router = Router()
 
-router.post("/orders", addOrder)
-router.get("/orders", getOrders)
+order_router.post("/orders", addOrder)
+order_router.get("/orders", getOrders)
 
-export default router
+export default order_router
