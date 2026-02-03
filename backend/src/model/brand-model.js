@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const brands_schema = mongoose.Schema({
 
-    brand_name : {type: String, required : true},
+    brand_name : {type: String, required : true, unique : true},
     country : {type : String, required : true}
 
 })
