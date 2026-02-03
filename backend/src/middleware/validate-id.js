@@ -10,16 +10,18 @@ export const validateId = (req,res,next)=>{
 
 }
 
-export const brandExists = (req,res,next)=>{
+export const brandExists = async (req,res,next)=>{
 
+    if (!brand_name) return res.status(400).json({message : "bad brand_name"})
+    if (!mongoose.isValidObjectId(brand_id)) {
+        return res.status(400).json({ message: "invalid brand id" })
+    }
 
-    const {brand_id} = req.body
-    const exists = Brand.exists({_id : brand_id})
-    if (!exists){
-        res.status(404).json("brand not found")
+    const exists = await Brand.exists({ _id: brand_id })
+    if (!exists) {
+        return res.status(404).json({ message: "brand not found" })
     }
 
     next()
-
 
 }
