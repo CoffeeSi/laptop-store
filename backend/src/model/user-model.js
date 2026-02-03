@@ -8,7 +8,7 @@
         address : {type : String, required : true},
         created_at : {type : Date, default : Date.now},
         passwordHash : {type : String, required : true},
-        role : {type : String, enum : ["admin", "customer"]}// either : admin, customer
+        role : {type : String, enum : ["admin", "customer"], default : "customer"}// either : admin, customer
 
     })
 
