@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header/Header.tsx";
 import { LaptopCard } from "@/features/laptop/components/LaptopCard/LaptopCard";
-import { Flex, Group, Stack } from "@mantine/core";
+import { Flex, Stack } from "@mantine/core";
 import classes from "./HomePage.module.css";
 
 function HomePage() {

@@ -1,15 +1,15 @@
 import {Router} from "express"
 
-import {addBrand, deleteBrand, patchBrand, getBrands, getBrandById} from "../controller/brands-controller"
-import {validateId} from "../middleware/validate-id"
+import {addBrand, deleteBrand, patchBrand, getBrands, getBrandById} from "../controller/brands-controller.js"
+import {validateId} from "../middleware/validate-id.js"
 
 const router = Router()
 
 //POST
-router.post("/brands/", addBrand)
+router.post("/brands", addBrand)
 
 //GET
-router.get("/brands/", getBrands)
+router.get("/brands", getBrands)
 router.get("/users/:id", validateId, getBrandById)
 
 //PATCH
