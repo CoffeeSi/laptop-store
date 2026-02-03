@@ -34,10 +34,10 @@ export const deleteBrand = async (req,res,next)=>{
         const {id} = req.params 
         const deletedBrand = await Brand.findByIdAndDelete(id);
         if (!deletedBrand){
-            return res.status(404).json({message : "User not found"}
+            return res.status(404).json({message : "Brand not found"}
             )
         }
-        return res.status(200).json(deletedUser)
+        return res.status(200).json(deletedBrand)
     }catch(err){
         next(err)
     }
