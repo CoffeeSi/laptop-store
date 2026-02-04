@@ -1,6 +1,6 @@
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
-import { createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
+import { createOrder , changeOrderStatus, refundLaptop, UserOrder} from "../services/order-service.js"
 
 export const addOrder = async (req, res, next) => {
   try {
@@ -70,6 +70,16 @@ export const patchOrderItems = async(req,res,next)=>{
 
       res.status(404).json({message : "Order not found"})
     }
+    next(err)
+  }
+
+}
+
+export const getUserOrders = async (req,res,next) =>{
+
+  try{
+    const users = await UserOrder(req.body)
+  }catch(err){
     next(err)
   }
 

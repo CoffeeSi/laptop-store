@@ -7,6 +7,7 @@ export const createOrder = async (dataSet) =>{
     if (!items || items.length === 0) {
       throw new Error("order items required")
     }
+
     let totalPrice = 0
     for (const item of items) {
       const laptop = await Laptop.findById(item.laptop_id)
@@ -42,7 +43,7 @@ export const changeOrderStatus = async (dataSet)=>{
 
 export const refundLaptop = async (dataSet) => {
     const { id, laptop_id } = dataSet
-    if (!laptop_id || id){
+    if (!laptop_id || !id){
         throw new error("bad data")
     }
     const order = await Order.findById(id)

@@ -13,3 +13,4 @@ const order_schema = mongoose.Schema({
 })
 
 const Order = mongoose.model("Orders", order_schema)
+// [1 laptop 3quantity, 2laptop quantity]
