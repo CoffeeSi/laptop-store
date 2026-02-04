@@ -1,36 +1,24 @@
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
+import { createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
 
 export const addOrder = async (req, res, next) => {
   try {
-    const { user_id, items, status } = req.body
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ message: "order items required" })
+    const order = createOrder(req.body)
+    if (!order){
+      res.status(400).json({message : "bad request"})
     }
-
-    let total_price = 0
-
-    for (const item of items) {
-      const laptop = await Laptop.findById(item.laptop_id)
-      if (!laptop) {
-        return res.status(404).json({ message: "laptop not found" })
-      }
-      total_price += laptop.price * item.quantity
-      item.unit_price = laptop.price
-    }
-
-    const order = new Order({
-      user_id,
-      items,
-      total_price,
-      status
-    })
-
-    await order.save()
     res.status(201).json(order)
 
   } catch (err) {
+    if (err.message == "order items required"){
+      res.status(400).json("order items are empty")
+    }
+    if (err.message == "laptop not found"){
+
+      res.status(400).json("laptop not found")
+
+    }
     next(err)
   }
 }
@@ -44,4 +32,45 @@ export const getOrders = async (req, res, next) => {
   } catch (err) {
     next(err)
   }
+}
+
+export const patchOrderStatus = async(req,res,next)=>{
+  try{
+  const exportDataSet = {
+    id : req.params.id,
+    status : req.body.status
+  }
+  const order = await changeOrderStatus(exportDataSet)
+  res.status(200).json(order)
+  }catch(err){
+    if (err.message == "Order not found"){
+      res.status(404).json({message : "Order not found"})
+    }
+    next(err)
+  }
+}
+
+export const patchOrderItems = async(req,res,next)=>{
+
+  try{
+    const dataSet = {
+
+      id : req.params.id,
+      laptop_id : req.body.laptop_id
+
+    }
+    const newOrder = await refundLaptop(dataSet)
+
+    res.status(200).json(newOrder)
+  }catch(err){
+    if(err.message == "bad data"){
+      res.status(400).json({message : "Bad data"})
+    }
+    if (err.message == "Order not found"){
+
+      res.status(404).json({message : "Order not found"})
+    }
+    next(err)
+  }
+
 }
