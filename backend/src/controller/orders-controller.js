@@ -79,7 +79,11 @@ export const getUserOrders = async (req,res,next) =>{
 
   try{
     const users = await UserOrder(req.body)
+    return users
   }catch(err){
+    if(err.message == "Order not found"){
+      return res.status(404).json({message : "Order not found"})
+    }
     next(err)
   }
 

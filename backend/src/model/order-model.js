@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 
 const order_schema = mongoose.Schema({
-
     user_id : {type : mongoose.Types.ObjectId, required : true, ref : "Users"},
     order_date : {type : Date, default: Date.now},
     status : {type : String, enum : ["pending", "shipping", "delievered"], required: true},
@@ -13,4 +12,3 @@ const order_schema = mongoose.Schema({
 })
 
 const Order = mongoose.model("Orders", order_schema)
-// [1 laptop 3quantity, 2laptop quantity]
