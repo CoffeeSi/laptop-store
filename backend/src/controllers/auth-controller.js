@@ -50,4 +50,12 @@ async function logoutUser(req, res) {
     })
 }
 
-export { registerUser, loginUser, logoutUser };
+async function authStatus(req, res) {
+    if (req.session.isLoggedIn) {
+        return res.status(200).json({ isLoggedIn: true, userID: req.session.userID });
+    } else {
+        return res.status(401).json({ isLoggedIn: false });
+    }
+}
+
+export { registerUser, loginUser, logoutUser, authStatus };
