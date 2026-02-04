@@ -1,10 +1,14 @@
 export interface ILaptop {
-    id: number,
+    _id: number,
     model_name: string,
+    price: number,
     brand: string,
-    cpu: number,
-    ram: string,
-    storage: string,
-    gpu: string,
+    specifications: [{
+        cpu: string,
+        gpu: string,
+        ram: string,
+        storage: string,
+    }],
     stock_quantity: number,
+    imgUrl: string,
 }

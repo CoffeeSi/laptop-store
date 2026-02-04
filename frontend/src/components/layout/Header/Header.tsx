@@ -27,6 +27,9 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Header.module.css';
+import { Link } from 'react-router-dom';
+import { useAuthStore } from '@/features/auth/store/authStore';
+import { useLogout } from '@/features/auth/hooks/useLogout';
 
 const mockdata = [
   {
@@ -64,7 +67,11 @@ const mockdata = [
 export function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+  const logout = useLogout();
   const theme = useMantineTheme();
+
+  
 
   const links = mockdata.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -88,7 +95,10 @@ export function Header() {
     <Box pb={120}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          1
+          <Text size="xl" fw={700} component={Link} to="/" className={classes.logo}>
+            LaptopShop
+          </Text>
+
           <Group h="100%" gap={0} visibleFrom="sm">
             <a href="#" className={classes.link}>
               Home
@@ -128,9 +138,18 @@ export function Header() {
             </a>
           </Group>
 
-          <Group visibleFrom="sm">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+          <Group visibleFrom='sm'>
+          {isLoggedIn ? (
+            <>
+              <Button variant="default" component={Link} to='/profile'>Profile</Button>
+              <Button onClick={logout}>Log out</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="default" component={Link} to="/login">Log in</Button>
+              <Button component={Link} to="/register">Sign up</Button>
+            </>
+          )}
           </Group>
 
           <Burger
@@ -151,7 +170,7 @@ export function Header() {
         hiddenFrom="sm"
         zIndex={1000000}
       >
-        <ScrollArea h="calc(100vh - 80px" mx="-md">
+        <ScrollArea h="calc(100vh - 80px)" mx="-md">
           <Divider my="sm" />
 
           <a href="#" className={classes.link}>
@@ -174,11 +193,20 @@ export function Header() {
           </a>
 
           <Divider my="sm" />
-
           <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+          {isLoggedIn ? (
+            <>
+              <Button variant="default" component={Link} to='/profile'>Profile</Button>
+              <Button onClick={logout}>Log out</Button>
+            </>
+          ) : (
+            <>
+              <Button variant="default" component={Link} to="/login">Log in</Button>
+              <Button component={Link} to="/register">Sign up</Button>
+            </>
+          )}
           </Group>
+          
         </ScrollArea>
       </Drawer>
     </Box>
