@@ -34,7 +34,7 @@ export const getBrandStatistics = async (dataSet) =>{
     const {id} = dataSet
     const brandObjectId = new mongoose.Types.ObjectId(id);
     const exists = await Brand.findById(id)
-    console.log(id)
+
     if(!exists){
         throw new Error("brand dne")
     }
