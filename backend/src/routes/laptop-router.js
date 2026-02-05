@@ -1,5 +1,5 @@
 import { Router } from "express"
-import {addLaptop, deleteLaptop, getLaptops, getFilteredLaptops} from "../controller/laptop-controller.js"
+import {addLaptop, deleteLaptop, getLaptops, getFilteredLaptops, getFilters} from "../controller/laptop-controller.js"
 import { protect, restrictTo } from "../middleware/role-validator.js"
 
 import { validateId} from "../middleware/validate-id.js"
@@ -11,6 +11,7 @@ const laptop_router = Router()
 //laptop_router.get("/:id", validateId, getLaptopById)
 laptop_router.get("/", getLaptops)
 laptop_router.get("/filter", getFilteredLaptops)
+laptop_router.get("/filterParams", getFilters)
 // POST
 laptop_router.post("/", protect, restrictTo("admin"), addLaptop)
 
