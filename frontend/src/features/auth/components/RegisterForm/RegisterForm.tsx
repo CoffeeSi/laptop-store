@@ -16,7 +16,7 @@ import classes from "./RegisterForm.module.css";
 
 export function RegisterForm() {
   const navigate = useNavigate();
-  const { register, error, loading } = useRegister();
+  const { register, error } = useRegister();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");

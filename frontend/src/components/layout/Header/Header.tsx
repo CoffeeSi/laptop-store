@@ -92,7 +92,7 @@ export function Header() {
   ));
 
   return (
-    <Box pb={120}>
+    <Box pb={20}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <Text size="xl" fw={700} component={Link} to="/" className={classes.logo}>
@@ -133,9 +133,9 @@ export function Header() {
             <a href="#" className={classes.link}>
               Learn
             </a>
-            <a href="#" className={classes.link}>
-              Academy
-            </a>
+            <Link to='/cart' className={classes.link}>
+              Cart
+            </Link>
           </Group>
 
           <Group visibleFrom='sm'>

@@ -16,7 +16,7 @@ import classes from './LoginForm.module.css';
 
 export function LoginForm() {
   const navigate = useNavigate();
-  const { login, error, loading } = useLogin();
+  const { login, error } = useLogin();
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

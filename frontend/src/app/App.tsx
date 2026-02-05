@@ -5,7 +5,6 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 
 function App() {
   useAuth();
-  
   return (
     <>
       <BrowserRouter>
