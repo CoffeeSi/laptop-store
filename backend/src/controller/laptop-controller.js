@@ -1,6 +1,10 @@
 import mongoose from "mongoose"
 import Laptop from "../model/laptop-model.js"
 import {validateLaptopData} from "../utils/validation.js"
+<<<<<<< HEAD
+=======
+
+>>>>>>> d36d5aa27ff1632bc20a8f8565273c920dbe8f37
 export const addLaptop = async (req,res,next)=>{
 
     try{
