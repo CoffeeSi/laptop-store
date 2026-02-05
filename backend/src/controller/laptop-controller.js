@@ -1,17 +1,21 @@
-import mongoose from "mongoose"
-import Laptop from "../model/laptop-model.js"
-import {validateLaptopData} from "../utils/validation.js"
-import { createLaptop, filterLaptops, listLaptops, removeLaptop } from "../services/laptop-service.js"
+import { createLaptop, filterLaptops, getOneLaptop, listLaptops, removeLaptop } from "../services/laptop-service.js"
+import { createLaptopDTO } from "./dto/create-laptop.js"
 export const addLaptop = async (req,res,next)=>{
 
     try{
-
-        const newLaptop = await createLaptop(req.body)
+        const dto = await createLaptopDTO.parseAsync(req.body)
+        const newLaptop = await createLaptop(dto)
         res.status(201).json(newLaptop)
 
     }catch(err){
+        if (err instanceof z.ZodError){
+            return res.status(400).json({message : "Bad request data"})
+        }
         if (err.message == "bad data"){
             return res.status(400).json({message : "bad data"})
+        }
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
         }
         next(err)
 
@@ -19,11 +23,21 @@ export const addLaptop = async (req,res,next)=>{
 
 }
 
+export const getFilters = async (req, res, next) =>{
+    try {
+      const data = await LaptopService.getUniqueComponents();
+      res.status(200).json(data);
+      
+    } catch (error) {
+        next(err)
+    }
+}
+
+
 export const deleteLaptop = async (req,res,next) =>{
 
 
     try{
-        
         const deletedLaptop = await removeLaptop(req.params.id)
         return res.status(200).json(deletedLaptop)
 
@@ -31,42 +45,19 @@ export const deleteLaptop = async (req,res,next) =>{
         if (err.message == "Laptop not found"){
             return res.status(404).json({message : "Laptop not found"})
         }
-        next(err)
-    }
-
-}
-
-export const patchLaptop = async(req,res,next) =>{
-
-
-    try{
-        const id = req.params.id
-        const {model_name, price, specifications, stock_quantity, brand_id} = req.body
-
-
-        const updatedData = {}
-
-        if (model_name) updatedData.model_name = model_name
-        if (price !== undefined) updatedData.price = price
-        if (specifications && specifications.length !==0) updatedData.specifications = specifications
-        if (stock_quantity !== undefined) updatedData.stock_quantity = stock_quantity
-        if (brand_id) updatedData.brand_id = brand_id
-        const laptop = await Laptop.findByIdAndUpdate(id, updatedData, {new : true, runValidators : true})
-        if (!laptop){
-            return res.status(404).json({message : "Laptop not found"})
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
         }
-        return res.status(200).json(laptop)
-        
-    }catch(err){
         next(err)
     }
 
 }
+
+
 
 export const getLaptops = async(req,res,next)=>{
     try{
-    let dataSet = {}
-    const laptops = await  listLaptops(dataSet)
+    const laptops = await  listLaptops({})
 
     return res.status(200).json(laptops)
     
@@ -77,13 +68,16 @@ export const getLaptops = async(req,res,next)=>{
 
 export const getLaptopById = async(req,res,next)=>{
     try{
-    const laptop = await listLaptops(req.params.id)
+    const laptop = await getOneLaptop({laptop_id : req.params.id})
 
 
     return res.status(200).json(laptop) 
     }catch(err){
         if (err.message == "Laptop not found"){
             return res.status(404).json({message : "Laptop not found"})
+        }
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
         }
         next(err)
     }
@@ -94,16 +88,43 @@ export const getFilteredLaptops = async (req,res,next)=>{
     try{
     const dataSet = {
 
-        brands : req.params.brands,
-        gpu : req.params.gpu,
-        cpu : req.params.cpu,
-        fromRam : req.params.fromRam,
-        toRam : req.params.toRam
+        brands : req.query.brands,
+        gpu : req.query.gpu,
+        cpu : req.query.cpu,
+        fromRam : req.query.fromRam,
+        toRam : req.query.toRam
 
     }
-    const filtered = await filterLaptops(req.body)
+    const filtered = await filterLaptops(dataSet)
     res.status(200).json(filtered)
     }catch(err){
         next(err)
     }
 }
+
+// export const patchLaptop = async(req,res,next) =>{
+
+
+//     try{
+//         const id = req.params.id
+//         const {model_name, price, specifications, stock_quantity, brand_id} = req.body
+
+
+//         const updatedData = {}
+
+//         if (model_name) updatedData.model_name = model_name
+//         if (price !== undefined) updatedData.price = price
+//         if (specifications && specifications.length !==0) updatedData.specifications = specifications
+//         if (stock_quantity !== undefined) updatedData.stock_quantity = stock_quantity
+//         if (brand_id) updatedData.brand_id = brand_id
+//         const laptop = await Laptop.findByIdAndUpdate(id, updatedData, {new : true, runValidators : true})
+//         if (!laptop){
+//             return res.status(404).json({message : "Laptop not found"})
+//         }
+//         return res.status(200).json(laptop)
+        
+//     }catch(err){
+//         next(err)
+//     }
+
+// }

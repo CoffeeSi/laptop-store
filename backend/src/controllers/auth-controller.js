@@ -36,7 +36,8 @@ async function loginUser(req, res) {
 
     req.session.isLoggedIn = true;
     req.session.userID = user._id.toString();
-
+    req.session.role = user.role;
+    
     return res.status(200).json({ message: 'Login successful' });
 }
 

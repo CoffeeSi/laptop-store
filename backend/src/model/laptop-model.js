@@ -8,7 +8,12 @@ const laptops_schema = mongoose.Schema({
     stock_quantity : {type : Number, required : true},
     brand_id : {type : mongoose.Types.ObjectId, required : true, ref : "Brands"}
 })
-
+laptops_schema.index({
+    brand_id: 1,
+    "specifications.gpu": 1,
+    "specifications.cpu": 1,
+    "specifications.ram": 1
+})
 const Laptop = mongoose.model("Laptops", laptops_schema)
 
 export default Laptop

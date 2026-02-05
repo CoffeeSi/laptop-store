@@ -1,51 +1,50 @@
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
 import { createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
+import { createOrderDTO } from "./dto/create-order.js"
 
 export const addOrder = async (req, res, next) => {
   try {
-    const order = createOrder(req.body)
-    if (!order){
-      res.status(400).json({message : "bad request"})
-    }
+    const dto = await createOrderDTO.parseAsync(req.body)
+    const order = await createOrder({items : dto.items, user_id : req.user.id})
+
     res.status(201).json(order)
 
   } catch (err) {
     if (err.message == "order items required"){
       res.status(400).json("order items are empty")
     }
+      if (!mongoose.Types.ObjectId.isValid(id)){
+            throw new Error("invalid id")
+        }
     if (err.message == "laptop not found"){
 
       res.status(400).json("laptop not found")
 
     }
+      if (err instanceof z.ZodError){
+      return res.status(400).json({message : "Bad request data"})
+  }
     next(err)
   }
 }
 
-export const getOrders = async (req, res, next) => {
-  try {
-    const orders = await Order.find()
-      .populate("user_id")
-      .populate("items.laptop_id")
-    res.json(orders)
-  } catch (err) {
-    next(err)
-  }
-}
 
 export const patchOrderStatus = async(req,res,next)=>{
   try{
-  const exportDataSet = {
-    id : req.params.id,
+
+  const order = await changeOrderStatus({
+    order_id : req.params.id,
     status : req.body.status
-  }
-  const order = await changeOrderStatus(exportDataSet)
+  })
   res.status(200).json(order)
   }catch(err){
     if (err.message == "Order not found"){
       res.status(404).json({message : "Order not found"})
     }
+        if (!mongoose.Types.ObjectId.isValid(id)){
+            throw new Error("invalid id")
+        }
     next(err)
   }
 }
@@ -53,13 +52,13 @@ export const patchOrderStatus = async(req,res,next)=>{
 export const patchOrderItems = async(req,res,next)=>{
 
   try{
-    const dataSet = {
 
-      id : req.params.id,
+    const newOrder = await refundLaptop({
+
+      order_id : req.params.id,
       laptop_id : req.body.laptop_id
 
-    }
-    const newOrder = await refundLaptop(dataSet)
+    })
 
     res.status(200).json(newOrder)
   }catch(err){
@@ -70,7 +69,22 @@ export const patchOrderItems = async(req,res,next)=>{
 
       res.status(404).json({message : "Order not found"})
     }
+      if (!mongoose.Types.ObjectId.isValid(id)){
+          throw new Error("invalid id")
+        }
     next(err)
   }
 
 }
+
+
+// export const getOrders = async (req, res, next) => {
+//   try {
+//     const orders = await Order.find()
+//       .populate("user_id")
+//       .populate("items.laptop_id")
+//     res.json(orders)
+//   } catch (err) {
+//     next(err)
+//   }
+// }

@@ -4,9 +4,7 @@ import Laptop from '../model/laptop-model.js'
 import Review from '../model/review-model.js'
 export const registerBrand = async (dataSet) =>{
     const {brand_name, country} = dataSet
-    if (!brand_name || !country){
-        throw new Error("invalid name or country")
-    }
+
     const exists = await Brand.findOne({brand_name : {$regex : new RegExp(`^${brand_name}$`, "i")}})
     if (exists){throw new Error("Already exists")}
 
@@ -19,8 +17,11 @@ export const registerBrand = async (dataSet) =>{
 }
 
 export const deleteBrand = async(dataSet) =>{
-    const {id} = dataSet
-    const someBrand = await Brand.findByIdAndDelete(id);
+    const {brand_id} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(brand_id)){
+        throw new Error("invalid id")
+    }
+    const someBrand = await Brand.findByIdAndDelete(brand_id);
     if (!someBrand){
 
         throw new Error("no such brand")
@@ -31,9 +32,12 @@ export const deleteBrand = async(dataSet) =>{
 
 export const getBrandStatistics = async (dataSet) =>{
 
-    const {id} = dataSet
-    const brandObjectId = new mongoose.Types.ObjectId(id);
-    const exists = await Brand.findById(id)
+    const {brand_id} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(brand_id)){
+        throw new Error("invalid id")
+    }
+    const brandObjectId = new mongoose.Types.ObjectId(brand_id);
+    const exists = await Brand.findById(brand_id)
 
     if(!exists){
         throw new Error("brand dne")
@@ -64,5 +68,13 @@ export const getBrandStatistics = async (dataSet) =>{
 
     
     return stats[0] 
+
+}
+
+export const getAllBrands = async (dataSet)=>{
+
+    const brands = await Brand.find({})
+
+    return brands
 
 }

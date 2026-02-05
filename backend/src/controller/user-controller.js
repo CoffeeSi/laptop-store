@@ -1,46 +1,18 @@
-import mongoose from "mongoose"
-import User from "../model/user-model.js"
-import { isValidEmail, isValidPhone } from "../utils/validation.js"
-import { UserOrders } from "../services/user-service.js"
+import * as z from "zod"
+import { getUserDataById, getUserOrders } from "../services/user-service.js"
 
-//add_user валидация присутствует
-//айди не прилетает БЕРЕТСЯ ИЗ ЗАПРОСА валидация присутствует
-export const deleteUser = async (req,res,next)=>{
-
-    try{
-        const id = req.params.id
-        const deletedUser = await User.findByIdAndDelete(id);
-        if (!deletedUser){
-            return res.status(404).json({message : "User not found"})
-        }
-        return res.status(200).json(deletedUser)
-    }
-    catch(err){
-        next(err)
-    }
-
-}
-// айди не прилетает БЕРЕТСЯ ИЗ ЗАПРОСА валидация присутствует
+// pod voprosom
 export const patchUser = async(req,res,next)=>{
     try{
-
-        const dataSet = {
-            id : req.params.id,
-            data : req.body
-        }
-
-        const patchedUser = await patchUser(dataSet)
+        const dto = z.parseAsync(req.body)
+        const patchedUser = await patchUser({id : req.params.id, data : dto})
         return res.status(200).json(patchedUser)
-
     }catch(err){
-        if (err.message == "invalid phone format"){
-            return res.status(400).json({ message: "invalid phone format" })
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
         }
-        if(err.message == "invalid email format"){
-            return res.status(400).json({message : "invalid email format"});
-        }
-        if(err.message == "email already exists"){
-            return res.status(409).json({ message: "email already exists" })
+        if (err instanceof z.ZodError){
+            return res.status(400).json({message : "Bad request data"})
         }
         if(err.message == "User not found"){
             return res.status(404).json({message : "User not found"})
@@ -48,30 +20,28 @@ export const patchUser = async(req,res,next)=>{
         next(err)
     }
 }
-// собирает всех юзеров
-export const getUsers = async(req,res,next)=>{
-    try{
 
-        const users = await User.find({})
-        return res.status(200).json(users)
-    }catch(err){
-        next(err)
-    }
 
-}
+// export const getUsers = async(req,res,next)=>{
+//     try{
 
-//юзер по айди айди не прилетает БЕРЕТСЯ ИЗ ЗАПРОСА валидация присутствует
+//         const users = await User.find({})
+//         return res.status(200).json(users)
+//     }catch(err){
+//         next(err)
+//     }
+
+// }
+
 export const getUserById = async(req,res,next)=>{
     try{
-        const id = req.params.id
-
-        const user = await User.findById(id)
-        if (!user){
-            return res.status(404).json({message : "user not found"})
-        }
-        return res.status(200).json(user)
+        const data = await getUserDataById({user_id : req.params.id})
+        return res.status(200).json(data)
 
     }catch(err){
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
+        }
         next(err)
     }
 
@@ -79,14 +49,12 @@ export const getUserById = async(req,res,next)=>{
 
 export const getOrdersOfUser = async (req,res,next)=>{
     try{
-        const dataSet = {
-
-            user_id : req.params.id,
-
-        }
-        const orders = await UserOrders(dataSet)
+        const orders = await getUserOrders({user_id : req.params.id})
         res.status(200).json(orders)
     }catch(err){
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
+        }
         if(err.message == "not found"){
             return res.status(404).json({message : "user not found"})
         }
@@ -94,3 +62,37 @@ export const getOrdersOfUser = async (req,res,next)=>{
     }
 
 }
+
+export const getReviewsOfUser = async (req,res,next)=>{
+
+    try{
+        const reviews = await getUserReviews({user_id : req.params.id})
+        res.status(200).json(reviews)
+    }
+    catch(err){
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
+        }
+
+        next(err) 
+    }
+
+}
+
+
+// export const deleteUser = async (req,res,next)=>{
+
+//     try{
+//         const id = req.params.id
+//         const deletedUser = await User.findByIdAndDelete(id);
+//         if (!deletedUser){
+//             return res.status(404).json({message : "User not found"})
+//         }
+//         return res.status(200).json(deletedUser)
+//     }
+//     catch(err){
+//         next(err)
+//     }
+
+// }
+

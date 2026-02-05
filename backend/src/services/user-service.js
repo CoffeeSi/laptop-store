@@ -1,28 +1,29 @@
 import mongoose from "mongoose"
-import Order from "../model/order-model"
-import User from "../model/user-model"
-export const UserOrders = async (dataSet) => {
+import Order from "../model/order-model.js"
+import User from "../model/user-model.js"
+import Review from "../model/review-model.js"
+export const getUserOrders = async (dataSet) => {
 
-    const {user_id} = dataSet
-    const brandObjectId = new mongoose.Types.ObjectId(user_id);
-    const orders = await Order.find({user_id : brandObjectId}, {order_date : 1, status : 1, total_price : 1, items : 1})
-    if (!orders || orders.length === 0){
-        throw new Error("not found")
+    const id = dataSet.user_id
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        throw new Error("invalid id")
     }
+    const brandObjectId = new mongoose.Types.ObjectId(id);
+
+    const orders = await Order.find({user_id : brandObjectId})
     return orders
 }
 
 export const updateUserService = async(dataSet) =>{
 
-    const id = dataSet.id
+    const id = dataSet.user_id
+
     const{full_name, email, phone, address} = dataSet.data
 
-    if (phone && !isValidPhone(phone)) {
-        throw new Error( "invalid phone format" )
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        throw new Error("invalid id")
     }
-    if (!isValidEmail(email) && email){
-       throw new Error("invalid email format")
-    }
+
     if (email){
         const exists = await User.findOne({email : email, _id : {$ne : id}})
         if (exists) {
@@ -43,4 +44,30 @@ export const updateUserService = async(dataSet) =>{
     }
     return user
     
+}
+
+export const getUserDataById = async(dataSet)=>{
+
+    const id = dataSet.user_id
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        throw new Error("invalid id")
+    }
+    const user = await User.findById(id)
+    if (!user){
+        throw new Error("user not found")
+    }
+    return user
+
+}
+
+export const getUserReviews = async(dataSet)=>{
+
+    const id = dataSet.user_id
+    if (!mongoose.Types.ObjectId.isValid(id)){
+        throw new Error("invalid id")
+    }
+    const userObjectId = new mongoose.Types.ObjectId(id);
+    const reviews = await Review.find({user_id : userObjectId})
+    return reviews
+
 }

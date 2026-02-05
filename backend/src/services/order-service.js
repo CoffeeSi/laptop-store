@@ -3,8 +3,10 @@ import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
 export const createOrder = async (dataSet) =>{
 
-    const {user_id, items} = dataSet 
-    
+    const {items,user_id} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(user_id)){
+            throw new Error("invalid id")
+        }
     if (!items || items.length === 0) {
       throw new Error("order items required")
     }
@@ -12,9 +14,11 @@ export const createOrder = async (dataSet) =>{
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
-        let totalPrice = 0
+        let total_price = 0
 
-        for (const item of items) {
+        for (const item of items)
+    {
+
         const laptop = await Laptop.findById(item.laptop_id).session(session)
 
         if (!laptop) {
@@ -25,19 +29,20 @@ export const createOrder = async (dataSet) =>{
             throw new Error("not in stock")
         }
 
-        totalPrice += laptop.price * item.quantity
+        total_price += laptop.price * item.quantity
         item.unit_price = laptop.price
-        laptop.stock_quantity -=item.quantity
-        await laptop.save({session})
-        }
+        await Laptop.findByIdAndUpdate(item.laptop_id,{$inc:{ stock_quantity: -item.quantity }},{new: true})
+
+    }
         const status = "pending"
         const order = new Order({
             user_id,
             items,
-            totalPrice,
+            total_price,
             status
         })
         await order.save({session})
+        await session.commitTransaction(); 
         return order
     }catch(err){
         await session.abortTransaction();
@@ -49,8 +54,10 @@ export const createOrder = async (dataSet) =>{
 
 export const changeOrderStatus = async (dataSet)=>{
 
-    const {id,status} = dataSet
-
+    const {order_id,status} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(order_id)){
+            throw new Error("invalid id")
+        }
     const order = await Order.findByIdAndUpdate(id, {status},{new : true, runValidators : true})
     if (!order){
         throw new Error("Order not found")
@@ -61,7 +68,10 @@ export const changeOrderStatus = async (dataSet)=>{
 }
 
 export const refundLaptop = async (dataSet) => {
-    const { id, laptop_id } = dataSet
+    const { order_id, laptop_id } = dataSet
+    if (!mongoose.Types.ObjectId.isValid(order_id)){
+        throw new Error("invalid id")
+    }
     if (!laptop_id || !id){
         throw new error("bad data")
     }
