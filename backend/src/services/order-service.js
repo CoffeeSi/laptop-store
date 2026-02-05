@@ -1,0 +1,94 @@
+import mongoose from "mongoose"
+import Order from "../model/order-model.js"
+import Laptop from "../model/laptop-model.js"
+export const createOrder = async (dataSet) =>{
+
+    const {items,user_id} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(user_id)){
+            throw new Error("invalid id")
+        }
+    if (!items || items.length === 0) {
+      throw new Error("order items required")
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try{
+        let total_price = 0
+
+        for (const item of items)
+    {
+
+        const laptop = await Laptop.findById(item.laptop_id).session(session)
+
+        if (!laptop) {
+            throw new Error("laptop not found")
+        }
+
+        if (laptop.stock_quantity < item.quantity){
+            throw new Error("not in stock")
+        }
+
+        total_price += laptop.price * item.quantity
+        item.unit_price = laptop.price
+        await Laptop.findByIdAndUpdate(item.laptop_id,{$inc:{ stock_quantity: -item.quantity }},{new: true})
+
+    }
+        const status = "pending"
+        const order = new Order({
+            user_id,
+            items,
+            total_price,
+            status
+        })
+        await order.save({session})
+        await session.commitTransaction(); 
+        return order
+    }catch(err){
+        await session.abortTransaction();
+        throw err;
+    }finally {
+        session.endSession();
+    }
+}   
+
+export const changeOrderStatus = async (dataSet)=>{
+
+    const {order_id,status} = dataSet
+    if (!mongoose.Types.ObjectId.isValid(order_id)){
+            throw new Error("invalid id")
+        }
+    const order = await Order.findByIdAndUpdate(id, {status},{new : true, runValidators : true})
+    if (!order){
+        throw new Error("Order not found")
+    }
+    return order
+
+
+}
+
+export const refundLaptop = async (dataSet) => {
+    const { order_id, laptop_id } = dataSet
+    if (!mongoose.Types.ObjectId.isValid(order_id)){
+        throw new Error("invalid id")
+    }
+    if (!laptop_id || !id){
+        throw new error("bad data")
+    }
+    const order = await Order.findById(id)
+    if (!order) throw new Error("Order not found")
+
+    const itemIndex = order.items.findIndex(item => item.laptop_id.toString() === laptop_id)
+    
+    if (itemIndex > -1) {
+        const priceToSubtract = order.items[itemIndex].price
+
+        order.total_price -= priceToSubtract
+
+        order.items.splice(itemIndex, 1)
+    
+        await order.save()
+    }
+
+    return order;
+};

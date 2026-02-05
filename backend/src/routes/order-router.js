@@ -1,10 +1,18 @@
 import { Router } from "express"
-import { addOrder, getOrders } from "../controller/orders-controller.js"
+import { addOrder,  patchOrderItems, patchOrderStatus } from "../controller/orders-controller.js"
 import { validateId } from "../middleware/validate-id.js"
+import { protect, restrictTo } from "../middleware/role-validator.js"
 
-const router = Router()
+const order_router = Router()
 
-router.post("/", addOrder)
-router.get("/", getOrders)
+order_router.post("/", protect, addOrder)
 
-export default router
+//order_router.get("/", getOrders)
+
+//patch status
+order_router.patch("/:id", protect, restrictTo("admin"),validateId, patchOrderStatus)
+
+//patch order items
+order_router.patch("/:id", protect, validateId, patchOrderItems)
+
+export default order_router
