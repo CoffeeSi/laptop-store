@@ -1,8 +1,10 @@
+import type { IBrand } from "@/features/brand/types/brand.types";
+
 export interface ILaptop {
-    _id: number,
+    _id: string,
     model_name: string,
     price: number,
-    brand: string,
+    brand_id: IBrand,
     specifications: [{
         cpu: string,
         gpu: string,

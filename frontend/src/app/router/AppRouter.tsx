@@ -5,13 +5,14 @@ import CartPage from '@/pages/CartPage/CartPage';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 import RegisterPage from '@/pages/RegisterPage/RegisterPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import PrivateRoute from './PrivateRoute';
 
 export const AppRouter = () => (
     <Routes>
         <Route path={PATHS.HOME} element={<HomePage />} />
-        <Route path={PATHS.CART} element={<CartPage />} />
         <Route path={PATHS.LOGIN} element={<LoginPage />} />
         <Route path={PATHS.REGISTER} element={<RegisterPage />} />
         <Route path={PATHS.NOT_FOUND} element={<NotFoundPage />} />
+        <Route path={PATHS.CART} element={<PrivateRoute><CartPage /></PrivateRoute>} />
     </Routes>
 )

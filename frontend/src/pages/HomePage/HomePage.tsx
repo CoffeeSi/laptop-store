@@ -7,10 +7,10 @@ function HomePage() {
   return (
     <>
       <Header />
-      <Stack className={classes.main} mb={50}>
+      <Stack className={classes.main}>
         <LaptopCards />
       </Stack>
     </>
   );
 }
-export default HomePage
+export default HomePage;

@@ -22,7 +22,7 @@ export const authApi = {
     },
 
     getAuthStatus: async () => {
-        const response = await apiClient.get('/auth/status', {withCredentials: true});
+        const response = await apiClient.get('/auth/status', {withCredentials: true});        
         return response.data;
     }
 };
