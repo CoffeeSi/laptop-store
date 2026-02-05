@@ -12,3 +12,4 @@ const order_schema = mongoose.Schema({
 })
 
 const Order = mongoose.model("Orders", order_schema)
+export default Order

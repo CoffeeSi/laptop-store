@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
-import Order from "../model/order-model"
-import Laptop from "../model/laptop-model"
+import Order from "../model/order-model.js"
+import Laptop from "../model/laptop-model.js"
 export const createOrder = async (dataSet) =>{
 
     const {user_id, items} = dataSet 

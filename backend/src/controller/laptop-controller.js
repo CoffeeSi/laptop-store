@@ -1,27 +1,18 @@
 import mongoose from "mongoose"
 import Laptop from "../model/laptop-model.js"
 import {validateLaptopData} from "../utils/validation.js"
-<<<<<<< HEAD
-=======
-
->>>>>>> d36d5aa27ff1632bc20a8f8565273c920dbe8f37
+import { createLaptop, filterLaptops, listLaptops, removeLaptop } from "../services/laptop-service.js"
 export const addLaptop = async (req,res,next)=>{
 
     try{
 
-        const isValid = validateLaptopData(req.body)
-        if (!isValid) return res.status(400).json({message : "bad data"})
-
-        const {model_name, price, specifications, stock_quantity, brand_id} = req.body 
-
-        const newLaptop = new Laptop({model_name, price, specifications, stock_quantity, brand_id})
-
-        await newLaptop.save()
-
+        const newLaptop = await createLaptop(req.body)
         res.status(201).json(newLaptop)
 
     }catch(err){
-
+        if (err.message == "bad data"){
+            return res.status(400).json({message : "bad data"})
+        }
         next(err)
 
     }
@@ -32,16 +23,14 @@ export const deleteLaptop = async (req,res,next) =>{
 
 
     try{
-
-        const id = req.params.id
-        const deletedLaptop = await Laptop.findByIdAndDelete(id);
-        if (!deletedLaptop){
-            return res.status(404).json({message : "Laptop not found"})
-        }
-
+        
+        const deletedLaptop = await removeLaptop(req.params.id)
         return res.status(200).json(deletedLaptop)
 
     }catch(err){
+        if (err.message == "Laptop not found"){
+            return res.status(404).json({message : "Laptop not found"})
+        }
         next(err)
     }
 
@@ -76,8 +65,11 @@ export const patchLaptop = async(req,res,next) =>{
 
 export const getLaptops = async(req,res,next)=>{
     try{
-    const laptops = await Laptop.find({}).populate("brand_id")
+    let dataSet = {}
+    const laptops = await  listLaptops(dataSet)
+
     return res.status(200).json(laptops)
+    
     }catch(err){
         next(err)
     }
@@ -85,16 +77,33 @@ export const getLaptops = async(req,res,next)=>{
 
 export const getLaptopById = async(req,res,next)=>{
     try{
-    const id = req.params.id
-    const laptop = await Laptop.findById(id)
+    const laptop = await listLaptops(req.params.id)
 
-    if (!laptop){
-        return res.status(404).json({message : "Laptop not found"})
-    }
 
     return res.status(200).json(laptop) 
     }catch(err){
+        if (err.message == "Laptop not found"){
+            return res.status(404).json({message : "Laptop not found"})
+        }
         next(err)
     }
 
+}
+
+export const getFilteredLaptops = async (req,res,next)=>{
+    try{
+    const dataSet = {
+
+        brands : req.params.brands,
+        gpu : req.params.gpu,
+        cpu : req.params.cpu,
+        fromRam : req.params.fromRam,
+        toRam : req.params.toRam
+
+    }
+    const filtered = await filterLaptops(req.body)
+    res.status(200).json(filtered)
+    }catch(err){
+        next(err)
+    }
 }
