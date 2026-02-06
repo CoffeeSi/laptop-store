@@ -8,7 +8,7 @@ const user_schema = mongoose.Schema({
     address : {type : String, required : true},
     created_at : {type : Date, default : Date.now},
     password : {type : String, required : true},
-    role : {type : String, enum : ["admin", "customer"]}// either : admin, customer
+    role : {type : String, default : "customer", enum : ["admin", "customer"]}// either : admin, customer
 
 })
 

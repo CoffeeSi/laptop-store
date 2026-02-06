@@ -1,16 +1,19 @@
 import { Router } from "express"
-import { deleteUser, patchUser, getUsers, getUserById } from "../controller/user-controller.js"
+import { patchUser, getUserById, getOrdersOfUser, getReviewsOfUser } from "../controller/user-controller.js"
 import { validateId } from "../middleware/validate-id.js"
-const router = Router()
+import { protect } from "../middleware/role-validator.js"
+
+const user_router = Router()
 
 //GET
-router.get("/", getUsers)
-router.get("/:id", validateId, getUserById)
+//router.get("/users/", getUsers)
+user_router.get("/:id", protect, validateId, getUserById)
+user_router.get("/:id/orders", protect, validateId, getOrdersOfUser)
+user_router.get("/:id/reviews", protect, validateId, getReviewsOfUser)
 
 //PATCH
-router.patch("/:id", validateId, patchUser)
-
+user_router.patch("/:id", protect, validateId, patchUser)
 //DELETE
-router.delete("/:id", validateId, deleteUser)
+//router.delete("/users/:id", validateId, deleteUser)
 
-export default router;
+export default user_router
