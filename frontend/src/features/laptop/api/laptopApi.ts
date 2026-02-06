@@ -6,4 +6,11 @@ export const laptopApi = {
         const response = await apiClient.get<ILaptop[]>("/laptops");
         return response.data;
     },
+    fetchLaptopById: async (id: string) => {
+        if (!id) {
+            throw new Error("Laptop ID is required");
+        }
+        const response = await apiClient.get<ILaptop>(`/laptops/${id}`);        
+        return response.data;
+    }
 }

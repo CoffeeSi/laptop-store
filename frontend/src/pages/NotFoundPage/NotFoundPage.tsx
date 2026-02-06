@@ -2,7 +2,7 @@ import { Container, Title, Text, Button, Group } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import classes from './NotFoundPage.module.css';
 
-function Illustration(props: any) {
+function Illustration(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 362 145" {...props}>
       <path

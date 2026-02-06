@@ -1,5 +1,4 @@
-import mongoose from "mongoose"
-import User from "./model/user-model.js"
+import User from "../model/user-model.js"
 import { isValidEmail, isValidPhone } from "../utils/validation.js"
 
 //add_user валидация присутствует

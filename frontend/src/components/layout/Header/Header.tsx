@@ -2,10 +2,13 @@ import {
   IconBook,
   IconChartPie3,
   IconChevronDown,
+  IconChevronRight,
   IconCode,
   IconCoin,
   IconFingerprint,
   IconNotification,
+  IconShoppingCart,
+  IconUser,
 } from '@tabler/icons-react';
 import {
   Anchor,
@@ -30,6 +33,7 @@ import classes from './Header.module.css';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/features/auth/store/authStore';
 import { useLogout } from '@/features/auth/hooks/useLogout';
+import { useUserStore } from '@/features/user/store/userStore';
 
 const mockdata = [
   {
@@ -67,11 +71,12 @@ const mockdata = [
 export function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
   const logout = useLogout();
   const theme = useMantineTheme();
 
-  
+  const user = useUserStore(state => state.user);
 
   const links = mockdata.map((item) => (
     <UnstyledButton className={classes.subLink} key={item.title}>
@@ -95,7 +100,7 @@ export function Header() {
     <Box pb={20}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <Text size="xl" fw={700} component={Link} to="/" className={classes.logo}>
+          <Text size="xl" fw={600} component={Link} to="/" className={classes.logo}>
             LaptopShop
           </Text>
 
@@ -108,7 +113,7 @@ export function Header() {
                 <a href="#" className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
-                      Features
+                      Brands
                     </Box>
                     <IconChevronDown size={16} color={theme.colors.blue[6]} />
                   </Center>
@@ -117,7 +122,7 @@ export function Header() {
 
               <HoverCard.Dropdown style={{ overflow: 'hidden' }}>
                 <Group justify="space-between" px="md">
-                  <Text fw={500}>Features</Text>
+                  <Text fw={500}>Brands</Text>
                   <Anchor href="#" fz="xs">
                     View all
                   </Anchor>
@@ -133,15 +138,27 @@ export function Header() {
             <a href="#" className={classes.link}>
               Learn
             </a>
-            <Link to='/cart' className={classes.link}>
-              Cart
-            </Link>
+            
           </Group>
 
           <Group visibleFrom='sm'>
           {isLoggedIn ? (
             <>
-              <Button variant="default" component={Link} to='/profile'>Profile</Button>
+              <Link to='/cart' className={classes.link}>
+                <IconShoppingCart size={24} />
+              </Link>
+              <UnstyledButton component={Link} to='/profile' className={classes.user}>
+                <Group>
+                  <IconUser size={24} />
+                  <div style={{ flex: 1 }}>
+                    <Text size="sm" fw={500}>
+                      {user ? user.full_name : "User"}
+                    </Text>
+                  </div>
+
+                  <IconChevronRight size={14} stroke={1.5} />
+                </Group>
+              </UnstyledButton>
               <Button onClick={logout}>Log out</Button>
             </>
           ) : (

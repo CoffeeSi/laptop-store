@@ -83,7 +83,7 @@ export const getLaptops = async(req,res,next)=>{
 export const getLaptopById = async(req,res,next)=>{
     try{
     const id = req.params.id
-    const laptop = await Laptop.findById(id)
+    const laptop = await Laptop.findById(id).populate("brand_id")
 
     if (!laptop){
         return res.status(404).json({message : "Laptop not found"})

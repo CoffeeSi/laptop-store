@@ -1,14 +1,16 @@
 import { Router } from "express"
-import { deleteUser, patchUser, getUsers, getUserById } from "../controller/user-controller"
-import { validateId } from "../middleware/validate-id"
+import { deleteUser, patchUser, getUsers, getUserById } from "../controller/user-controller.js"
+import { validateId } from "../middleware/validate-id.js"
 const router = Router()
 
 //GET
-router.get("/users/", getUsers)
-router.get("/users/:id", validateId, getUserById)
+router.get("/", getUsers)
+router.get("/:id", validateId, getUserById)
 
 //PATCH
-router.patch("/users/:id", validateId, patchUser)
+router.patch("/:id", validateId, patchUser)
 
 //DELETE
-router.delete("/users/:id", validateId, deleteUser)
+router.delete("/:id", validateId, deleteUser)
+
+export default router;

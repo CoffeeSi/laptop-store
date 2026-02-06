@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { authApi } from '../api/authApi'
+import { useUser } from '@/features/user/hooks/useUser';
 
 export function useAuth() {
+    const fetchUser = useUser()
     const setAuth = useAuthStore(state => state.setAuth);
     const clearAuth = useAuthStore(state => state.clearAuth);
     const setLoading = useAuthStore(state => state.setLoading);
@@ -15,6 +17,7 @@ export function useAuth() {
             .then(data => {
                 if (data.isLoggedIn) {                    
                     setAuth(data.userID);
+                    fetchUser(data.userID)
                 } else {
                     clearAuth();
                 }
@@ -25,5 +28,5 @@ export function useAuth() {
             })
             .finally(() => setLoading(false));
         
-    }, [isLoading, setAuth, clearAuth, setLoading]);
+    }, [fetchUser, setAuth, clearAuth, setLoading, isLoading]);
 }
