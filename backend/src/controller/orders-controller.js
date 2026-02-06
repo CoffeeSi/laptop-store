@@ -12,14 +12,18 @@ export const addOrder = async (req, res, next) => {
 
   } catch (err) {
     if (err.message == "order items required"){
-      res.status(400).json("order items are empty")
+      return res.status(400).json("order items are empty")
     }
-      if (!mongoose.Types.ObjectId.isValid(id)){
-            throw new Error("invalid id")
-        }
+    if (err.message === "not in stock"){
+      return res.status(400).json({message : "not in stock"})
+    }
+    if(err.message == "invalid id"){
+        return res.status(400).json({ message: "invalid id"})
+    }
+  
     if (err.message == "laptop not found"){
 
-      res.status(400).json("laptop not found")
+      return res.status(400).json("laptop not found")
 
     }
       if (err instanceof z.ZodError){
@@ -40,11 +44,12 @@ export const patchOrderStatus = async(req,res,next)=>{
   res.status(200).json(order)
   }catch(err){
     if (err.message == "Order not found"){
-      res.status(404).json({message : "Order not found"})
+      return res.status(404).json({message : "Order not found"})
     }
-        if (!mongoose.Types.ObjectId.isValid(id)){
-            throw new Error("invalid id")
-        }
+      if(err.message == "invalid id"){
+          return res.status(400).json({ message: "invalid id"})
+      }
+  
     next(err)
   }
 }
@@ -63,15 +68,16 @@ export const patchOrderItems = async(req,res,next)=>{
     res.status(200).json(newOrder)
   }catch(err){
     if(err.message == "bad data"){
-      res.status(400).json({message : "Bad data"})
+      return res.status(400).json({message : "Bad data"})
     }
     if (err.message == "Order not found"){
 
-      res.status(404).json({message : "Order not found"})
+      return res.status(404).json({message : "Order not found"})
     }
-      if (!mongoose.Types.ObjectId.isValid(id)){
-          throw new Error("invalid id")
-        }
+    if(err.message == "invalid id"){
+        return res.status(400).json({ message: "invalid id"})
+    }
+
     next(err)
   }
 

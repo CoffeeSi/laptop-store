@@ -34,7 +34,7 @@ export const deleteReview = async(req,res,next)=>{
 
   }catch(err){
     if (err.message == "not found"){
-      res.status(404).json("Not found")
+      return res.status(404).json("Not found")
     }
     next(err)
   }
