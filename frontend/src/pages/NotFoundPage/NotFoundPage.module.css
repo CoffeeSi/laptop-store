@@ -29,7 +29,7 @@
 
 .description {
   max-width: 540px;
-  margin: auto;
+  margin: 20px auto !important;
   margin-top: var(--mantine-spacing-xl);
   margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
 }

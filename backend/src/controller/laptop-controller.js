@@ -1,4 +1,4 @@
-import { createLaptop, filterLaptops, getOneLaptop, listLaptops, removeLaptop } from "../services/laptop-service.js"
+import {uniqueComponents, createLaptop, getOneLaptop, removeLaptop, retrieveLaptops } from "../services/laptop-service.js"
 import { createLaptopDTO } from "./dto/create-laptop.js"
 export const addLaptop = async (req,res,next)=>{
 
@@ -10,6 +10,9 @@ export const addLaptop = async (req,res,next)=>{
     }catch(err){
         if (err instanceof z.ZodError){
             return res.status(400).json({message : "Bad request data"})
+        }
+        if (err.message === "not in stock"){
+            return res.status(400).json({message : "not in stock"})
         }
         if (err.message == "bad data"){
             return res.status(400).json({message : "bad data"})
@@ -25,10 +28,10 @@ export const addLaptop = async (req,res,next)=>{
 
 export const getFilters = async (req, res, next) =>{
     try {
-      const data = await LaptopService.getUniqueComponents();
+      const data = await uniqueComponents();
       res.status(200).json(data);
       
-    } catch (error) {
+    } catch (err) {
         next(err)
     }
 }
@@ -55,21 +58,20 @@ export const deleteLaptop = async (req,res,next) =>{
 
 
 
-export const getLaptops = async(req,res,next)=>{
-    try{
-    const laptops = await  listLaptops({})
+// export const getLaptops = async(req,res,next)=>{
+//     try{
+//     const laptops = await  listLaptops({})
 
-    return res.status(200).json(laptops)
+//     return res.status(200).json(laptops)
     
-    }catch(err){
-        next(err)
-    }
-}
+//     }catch(err){
+//         next(err)
+//     }
+// }
 
 export const getLaptopById = async(req,res,next)=>{
     try{
     const laptop = await getOneLaptop({laptop_id : req.params.id})
-
 
     return res.status(200).json(laptop) 
     }catch(err){
@@ -84,20 +86,21 @@ export const getLaptopById = async(req,res,next)=>{
 
 }
 
-export const getFilteredLaptops = async (req,res,next)=>{
-    try{
-    const dataSet = {
+export const getLaptops = async (req,res,next)=>{
+    try{        
+        const parsedQuery = getLaptopsQuerySchema.parse(req.query)
 
-        brands : req.query.brands,
-        gpu : req.query.gpu,
-        cpu : req.query.cpu,
-        fromRam : req.query.fromRam,
-        toRam : req.query.toRam
-
-    }
-    const filtered = await filterLaptops(dataSet)
-    res.status(200).json(filtered)
-    }catch(err){
+        const dataSet = {
+        brands: parsedQuery.brands,
+        gpus: parsedQuery.gpus,
+        cpus: parsedQuery.cpus,
+        storage: parsedQuery.storage,
+        ram: parsedQuery.ram,
+        page: parsedQuery.page
+        }
+        const filtered = await retrieveLaptops(dataSet)
+        res.status(200).json(filtered)
+    } catch(err){
         next(err)
     }
 }

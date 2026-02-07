@@ -17,6 +17,7 @@
   font-size: var(--mantine-font-size-xs);
   letter-spacing: -0.25px;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .section {

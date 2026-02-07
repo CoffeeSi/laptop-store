@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header/Header.tsx";
 import { LaptopCards } from "@/features/laptop/components/LaptopCard/LaptopCards";
-import { Stack } from "@mantine/core";
+import { Grid, Stack } from "@mantine/core";
 import classes from "./HomePage.module.css";
 
 function HomePage() {
@@ -8,7 +8,9 @@ function HomePage() {
     <>
       <Header />
       <Stack className={classes.main}>
-        <LaptopCards />
+        <Grid>
+          <LaptopCards />
+        </Grid>
       </Stack>
     </>
   );

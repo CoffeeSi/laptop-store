@@ -1,0 +1,8 @@
+.order_link {
+    text-decoration: none;
+    color: black;
+    &:visited {
+        text-decoration: none;
+        color: black;
+    }
+}

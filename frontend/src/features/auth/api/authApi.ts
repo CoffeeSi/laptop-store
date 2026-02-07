@@ -15,9 +15,6 @@ export const authApi = {
     
     logout: async () => {
         const response = await apiClient.post('/auth/logout', {}, {withCredentials: true});
-        if (response.status !== 401) {
-            return console.error('Logout failed');
-        }
         return response.data;
     },
 
