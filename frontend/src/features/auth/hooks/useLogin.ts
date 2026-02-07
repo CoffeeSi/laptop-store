@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
+import { useUser } from '@/features/user/hooks/useUser';
 import type { ILoginPayload } from '../types/login.types';
 import type { AxiosError } from 'axios';
 
 export const useLogin = () => {
     const setUser = useAuthStore(state => state.setAuth);
+    const fetchUser = useUser();
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     
@@ -15,7 +17,9 @@ export const useLogin = () => {
 
         try {
             const data = await authApi.login(payload);
-            setUser(data.data.userID);
+            const userID = data.data.userID;
+            setUser(userID);
+            await fetchUser(userID);
         } catch (err: unknown) {
             const axiosError = err as AxiosError<{ message?: string }>;
             const message = axiosError.response?.data?.message || 'Login failed';

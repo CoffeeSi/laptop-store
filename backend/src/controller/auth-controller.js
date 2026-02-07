@@ -38,7 +38,10 @@ async function loginUser(req, res) {
     req.session.userID = user._id.toString();
     req.session.role = user.role;
     
-    return res.status(200).json({ message: 'Login successful' });
+    return res.status(200).json({ 
+        message: 'Login successful',
+        userID: user._id.toString()
+    });
 }
 
 async function logoutUser(req, res) {
@@ -46,7 +49,7 @@ async function logoutUser(req, res) {
         if (err) {
             return res.status(500).json({ message: 'Error logging out' });
         }
-        res.clearCookie('session_id');
+        res.clearCookie('session-id');
         res.status(200).json({ message: 'Logout successful' });
     })
 }
