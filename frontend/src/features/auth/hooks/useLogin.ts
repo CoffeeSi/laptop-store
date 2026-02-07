@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
 import type { ILoginPayload } from '../types/login.types';
+import type { AxiosError } from 'axios';
 
 export const useLogin = () => {
     const setUser = useAuthStore(state => state.setAuth);
@@ -15,9 +16,11 @@ export const useLogin = () => {
         try {
             const data = await authApi.login(payload);
             setUser(data.data.userID);
-        } catch (err: any) {
-            setError(err.response?.data?.message || 'Login failed');
-            return { success: false };
+        } catch (err: unknown) {
+            const axiosError = err as AxiosError<{ message?: string }>;
+            const message = axiosError.response?.data?.message || 'Login failed';
+            setError(message);
+            return { success: false, message: message };
         } finally {
             setLoading(false);
         }

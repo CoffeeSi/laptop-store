@@ -35,18 +35,29 @@ export const removeLaptop = async(dataSet) =>{
 }
 
 
-export const listLaptops = async (dataSet)=>{
+// export const listLaptops = async (dataSet)=>{
 
-    const laptops = await Laptop.find({}).populate("brand_id")
-    return laptops
+//     const laptops = await Laptop.find({}).populate("brand_id")
+//     return laptops
 
-}
+// }
 
 export const uniqueComponents = async ()=>{
+    // const minRam = await Laptop.findOne().sort({"specifications.ram": 1}).exec()
+    // const maxRam = await Laptop.findOne().sort({"specifications.ram": -1})
 
-    const [cpus, gpus] = await Promise.all([Laptop.distinct('specifications.cpu'),Laptop.distinct('specifications.gpu')]);
+    const [cpus, gpus, storage, ram] = await Promise.all(
+    [
+        Laptop.distinct('specifications.cpu'),
+        Laptop.distinct('specifications.gpu'),
+        Laptop.distinct('specifications.storage'),
+        {
+            "min": 8,
+            "max": 32
+        }
+    ]);
 
-    return { cpus, gpus };
+    return { cpus, gpus, storage, ram };
   }
 
 export const getOneLaptop = async (dataSet)=>{
@@ -61,34 +72,46 @@ export const getOneLaptop = async (dataSet)=>{
     return laptop
 }
 
-export const filterLaptops = async (dataSet)=>{
+export const retrieveLaptops = async (dataSet)=>{
     //validation ? 
-    const {brands, gpu, cpu, fromRam, toRam} = dataSet
-
+    const { brands, gpus, cpus, storage, ram } = dataSet
+    const brandsArray = brands ? Array.from(brands.split(',')) : []
+    const cpuArray = cpus ? Array.from(cpus.split(',')) : []
+    const gpuArray = gpus ? Array.from(gpus.split(',')) : []
+    const storageArray = storage ? Array.from(storage.split(',')) : []
     const filter = {}
-    if(brands?.length && Array.isArray(brands)){
-        filter.brand_id = {$in: brands.map(id => new mongoose.Types.ObjectId(id))
+
+    if (brandsArray.length && Array.isArray(brandsArray)){        
+        filter.brand_id = {$in: brandsArray.map(id => new mongoose.Types.ObjectId(id))}
+    }
+    if (gpuArray.length && Array.isArray(gpuArray)){
+        
+        filter["specifications.gpu"] = {$in : gpuArray}
+    }
+
+    if (cpuArray.length && Array.isArray(cpuArray)){
+        filter["specifications.cpu"] = {$in : cpuArray}
+    }
+    if (storageArray.length && Array.isArray(storageArray)){
+        filter["specifications.storage"] = {$in : storageArray}
+    }
+
+    const ramFilter = {}
+    
+    if (ram) {
+        try {
+            const ramObj = typeof ram === 'string' ? JSON.parse(ram) : ram
+            if (ramObj.min !== undefined) ramFilter.$gte = parseFloat(ramObj.min)
+            if (ramObj.max !== undefined) ramFilter.$lte = parseFloat(ramObj.max)
+        } catch (e) {
+            console.error("Error parsing RAM filter:", e)
         }
     }
 
-    if (gpu?.length && Array.isArray(gpu)){
-        filter["specifications.gpu"] = {$in : gpu}
+    if (Object.keys(ramFilter).length) {
+        filter["specifications.ram"] = ramFilter
     }
-
-    if (cpu?.length && Array.isArray(cpu)){
-        filter["specifications.cpu"] = {$in : cpu}
-    }
-
-    const ram = {}
-    if (fromRam !== undefined) ram.$gte = fromRam
-    if (toRam !== undefined) ram.$lte = toRam
-
-    if (Object.keys(ram).length) {
-        filter["specifications.ram"] = ram
-    }
-
+        
     const filtered = await Laptop.find(filter)
     return filtered
-
-
 }

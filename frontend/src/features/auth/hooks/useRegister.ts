@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { authApi } from '../api/authApi';
 import { useAuthStore } from '../store/authStore';
 import type { IRegisterPayload } from '../types/register.types';
+import type { AxiosError } from 'axios';
 
 export const useRegister = () => {
     const setUser = useAuthStore(state => state.setAuth);
@@ -15,8 +16,10 @@ export const useRegister = () => {
         try {
             const response = await authApi.register(payload);   
             setUser(response.data.userID);
-        } catch (err: any) {
-            return { success: false, message: err.response?.data?.message || 'Registration failed' };
+        } catch (err: unknown) {
+            const axiosError = err as AxiosError<{ message?: string }>;
+            const message = axiosError.response?.data?.message || 'Registration failed';
+            return { success: false, message: message };
         } finally {
             setLoading(false);
         }

@@ -1,12 +1,14 @@
 import { Button, Card, Modal, Table, Text } from "@mantine/core";
 import { useCartStore } from "@/features/cart/store/cartStore";
 import classes from "./OrderCard.module.css";
-import { useOrder } from "../../hooks/useOrder";
+import { useOrder } from "../../hooks/useCreateOrder";
 import { useDisclosure } from "@mantine/hooks";
+import { useUserStore } from "@/features/user/store/userStore";
 
 export function OrderCard() {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const user = useUserStore((state) => state.user);
   const items = useCartStore((state) => state.items);
   const totalCost = Object.values(items).reduce(
     (sum, item) => sum + (item.laptop.price * item.quantity), 
@@ -15,7 +17,7 @@ export function OrderCard() {
   const { createOrder } = useOrder();
 
   const data_table = [
-    { label: "Address", value: "123 Main St, City, Country" },
+    { label: "Address", value: user.address },
     { label: "Payment Method", value: "Credit Card" },
     { label: "Total", value: new Intl.NumberFormat('ru-KZ', {
         style: "currency",
@@ -50,7 +52,7 @@ export function OrderCard() {
             {rows}
           </Table.Tbody>
         </Table>
-        <Button fullWidth variant="filled" disabled={totalCost === 0} onClick={() => {createOrder(); open;}}>Order</Button>
+        <Button fullWidth variant="filled" disabled={totalCost === 0} onClick={() => {createOrder(); open();}}>Order</Button>
       </div>
     </Card>
     </>
