@@ -3,9 +3,7 @@ import type { ILaptop } from "../types/laptop.types";
 import type { IFilters } from "../types/filters.types";
 
 export const laptopApi = {
-    fetchLaptops: async (filters: URLSearchParams) => {
-        console.log(filters.toString());
-        
+    fetchLaptops: async (filters: URLSearchParams) => {        
         const response = await apiClient.get<ILaptop[]>(`/laptops?${filters.toString()}`);
         return response.data;
     }, 

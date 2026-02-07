@@ -4,10 +4,22 @@ import { MantineProvider } from "@mantine/core"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/features/auth/store/authStore';
 
 function App() {
   const [client] = useState(new QueryClient())
+  
   useAuth();
+  
+  const isLoading = useAuthStore(state => state.isLoading);
+  
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        Загрузка...
+      </div>
+    );
+  }
 
   return (
     <>
