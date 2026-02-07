@@ -1,7 +1,6 @@
-import Order from "../model/order-model.js"
-import Laptop from "../model/laptop-model.js"
-import { createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
+import { listOrders, createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
 import { createOrderDTO } from "./dto/create-order.js"
+import * as z from "zod"
 
 export const addOrder = async (req, res, next) => {
   try {
@@ -14,17 +13,13 @@ export const addOrder = async (req, res, next) => {
     if (err.message == "order items required"){
       res.status(400).json("order items are empty")
     }
-      if (!mongoose.Types.ObjectId.isValid(id)){
-            throw new Error("invalid id")
-        }
     if (err.message == "laptop not found"){
 
       res.status(400).json("laptop not found")
-
     }
-      if (err instanceof z.ZodError){
+    if (err instanceof z.ZodError){
       return res.status(400).json({message : "Bad request data"})
-  }
+    }
     next(err)
   }
 }
@@ -42,9 +37,6 @@ export const patchOrderStatus = async(req,res,next)=>{
     if (err.message == "Order not found"){
       res.status(404).json({message : "Order not found"})
     }
-        if (!mongoose.Types.ObjectId.isValid(id)){
-            throw new Error("invalid id")
-        }
     next(err)
   }
 }
@@ -69,22 +61,17 @@ export const patchOrderItems = async(req,res,next)=>{
 
       res.status(404).json({message : "Order not found"})
     }
-      if (!mongoose.Types.ObjectId.isValid(id)){
-          throw new Error("invalid id")
-        }
     next(err)
   }
 
 }
 
-
-// export const getOrders = async (req, res, next) => {
-//   try {
-//     const orders = await Order.find()
-//       .populate("user_id")
-//       .populate("items.laptop_id")
-//     res.json(orders)
-//   } catch (err) {
-//     next(err)
-//   }
-// }
+export const getOrders = async (req, res, next) => {
+  try {
+    const user_id = req.session.userID;
+    const orders = await listOrders(user_id)
+    res.json(orders)
+  } catch (err) {
+    next(err)
+  }
+}

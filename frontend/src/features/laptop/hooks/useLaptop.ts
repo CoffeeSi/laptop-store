@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react";
 import { laptopApi } from "../api/laptopApi";
 import type { ILaptop } from "../types/laptop.types";
+import { useQuery } from "@tanstack/react-query";
 
-export function useLaptop(id: string): { laptop: ILaptop | undefined; loading: boolean } {
+export function useLaptop(id: string): { laptop: ILaptop | undefined; isLoading: boolean } {
     const [laptop, setLaptop] = useState<ILaptop>();
-    const [loading, setLoading] = useState<boolean>(true);
+
+    const { data, isLoading } = useQuery({
+        queryKey: ['laptop', id],
+        queryFn: () => laptopApi.fetchLaptopById(id)
+    })
 
     useEffect(() => {
-        const fetchLaptop = async () => {
-            setLoading(true);
-            try {
-                const data = await laptopApi.fetchLaptopById(id);                                                
-                setLaptop(data);
-            } catch (error) {
-                console.error("Failed to fetch laptop:", error);
-            } finally {
-                setLoading(false);
-            }
+        if (data) {
+            setLaptop(data);
         }
-        void fetchLaptop();
-    }, [id]);
+    }, [data]);
     
-    return { laptop, loading };
+    return { laptop, isLoading };
 }

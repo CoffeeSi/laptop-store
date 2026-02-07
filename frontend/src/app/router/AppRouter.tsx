@@ -9,12 +9,14 @@ import RegisterPage from '@/pages/RegisterPage/RegisterPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
 import ProfilePage from '@/pages/ProfilePage/ProfilePage';
+import SearchPage from '@/pages/SearchPage/SearchPage';
 
 export const AppRouter = () => (
     <Routes>
         <Route path={PATHS.HOME} element={<HomePage />} />
         <Route path={PATHS.LAPTOP} element={<LaptopPage />} />
         <Route path={PATHS.BRAND} element={<BrandPage />} />
+        <Route path={PATHS.SEARCH} element={<SearchPage/>} />
         <Route path={PATHS.LOGIN} element={<LoginPage />} />
         <Route path={PATHS.REGISTER} element={<RegisterPage />} />
         <Route path={PATHS.NOT_FOUND} element={<NotFoundPage />} />

@@ -7,6 +7,7 @@ import {
   IconCoin,
   IconFingerprint,
   IconNotification,
+  IconSearch,
   IconShoppingCart,
   IconUser,
 } from '@tabler/icons-react';
@@ -142,6 +143,9 @@ export function Header() {
           </Group>
 
           <Group visibleFrom='sm'>
+          <Link to='/search' className={classes.link}>
+            <IconSearch size={24} />
+          </Link>
           {isLoggedIn ? (
             <>
               <Link to='/cart' className={classes.link}>

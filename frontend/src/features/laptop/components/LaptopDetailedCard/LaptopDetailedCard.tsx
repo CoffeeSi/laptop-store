@@ -1,20 +1,19 @@
 import { Card, Text, Title, Image, Stack, Table, Grid, GridCol } from "@mantine/core";
 import { Navigate } from "react-router-dom";
 import { useLaptop } from "../../hooks/useLaptop";
-import type { ILaptopSpecifications } from "../../types/laptop.types";
 
 function LaptopDetailedCard({ laptopID }: { laptopID: string }) {
-  const { laptop, loading } = useLaptop(laptopID);
+  const { laptop, isLoading } = useLaptop(laptopID);  
 
-  if (!loading && !laptop) {
-      return (
-        <>
-          <Navigate to="/not-found" />
-        </>
-      );
-    }
+  // if (!isLoading && !laptop) {
+  //     return (
+  //       <>
+  //         <Navigate to="/not-found" />
+  //       </>
+  //     );
+  //   }
     
-  const table_items = laptop ? (Object.entries(laptop.specifications[0] as ILaptopSpecifications)
+  const table_items = laptop ? (Object.entries(laptop.specifications)
     .filter(([key])=> key !== "_id")
     .map(([key, value]) => (
       <Table.Tr key={key}>

@@ -11,7 +11,7 @@ export interface IOrder {
 
 export interface IOrderItem {
     // laptop_id: string,
-    laptop: ILaptop,
+    laptop_id: ILaptop,
     quantity: number,
     unit_price: number
 }

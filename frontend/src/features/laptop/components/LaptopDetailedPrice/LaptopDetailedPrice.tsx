@@ -10,24 +10,24 @@ export function LaptopDetailedPrice({ laptopID }: { laptopID: string }) {
   const items = useCartStore(state => state.items);
   const [isToggled, setIsToggled] = useState(false);
   const [isOutOfStock, setIsOutOfStock] = useState(false);
-  const { laptop, loading } = useLaptop(laptopID);
+  const { laptop, isLoading } = useLaptop(laptopID);
 
   useEffect(() => {
-    if (!loading && laptop && !laptop.stock_quantity) {
+    if (!isLoading && laptop && !laptop.stock_quantity) {
       setIsOutOfStock(true);
     } else if (laptop && (items[laptopID]?.quantity || 0) >= laptop.stock_quantity) {
       setIsOutOfStock(true);
     }
-  }, [loading, laptop]);
+  }, [isLoading, laptop, items, laptopID]);
 
 
-  if (!laptop && !loading) {
-    return (
-      <>
-        <Navigate to="/not-found" />
-      </>
-    );
-  }
+  // if (!laptop && !isLoading) {
+  //   return (
+  //     <>
+  //       <Navigate to="/not-found" />
+  //     </>
+  //   );
+  // }
 
   const addToCart = () => {
     if (!laptop?.stock_quantity) {

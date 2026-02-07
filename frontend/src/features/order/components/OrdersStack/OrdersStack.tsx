@@ -1,52 +1,8 @@
-import { Avatar, Group, Text, Table, ActionIcon, Menu, Alert } from "@mantine/core";
+import { Group, Text, Table, ActionIcon, Menu, Alert } from "@mantine/core";
 import { IconDots, IconMessages, IconNote, IconReportAnalytics, IconTrash } from "@tabler/icons-react";
 import { useOrders } from "../../hooks/useOrders";
-
-const data = [
-
-  {
-    avatar:
-      'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-1.png',
-    name: 'Robert Wolfkisser',
-    job: 'Engineer',
-    email: 'rob_wolf@gmail.com',
-    rate: 22,
-  },
-  {
-    avatar:
-      'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-5.png',
-    name: 'Jill Jailbreaker',
-    job: 'Engineer',
-    email: 'jj@breaker.com',
-    rate: 45,
-  },
-  {
-    avatar:
-      'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-3.png',
-    name: 'Henry Silkeater',
-    job: 'Designer',
-    email: 'henry@silkeater.io',
-    rate: 76,
-  },
-  {
-    avatar:
-      'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-3.png',
-    name: 'Bill Horsefighter',
-    job: 'Designer',
-    email: 'bhorsefighter@gmail.com',
-    rate: 15,
-  },
-  {
-    avatar:
-      'https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/avatars/avatar-2.png',
-    name: 'Jeremy Footviewer',
-    job: 'Manager',
-    email: 'jeremy@foot.dev',
-    rate: 98,
-  },
-];
-
-
+import { Link } from "react-router-dom";
+import classes from './OrdersStack.module.css';
 
 export function OrdersStack() {
   const { orders, error } = useOrders();
@@ -54,32 +10,28 @@ export function OrdersStack() {
   if (error) {
     return (
       <Alert variant="light" color="red" radius="md" title="Alert title">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. At officiis, quae tempore necessitatibus placeat saepe.
+        Order error
       </Alert>
     )
   }
 
   const rows = orders.map((order) => {
+    
     const order_laptops = order.items.map((item) => (
       <>
-        <Text>{item.laptop.model_name}</Text>
-        <Text>{item.laptop.price}</Text>
+        <Group gap="sm" key={item.laptop_id._id}>
+          <Link to={`/laptop/${item.laptop_id._id}`} className={classes.order_link}>{item.laptop_id.model_name} x {item.quantity}</Link>
+        </Group>
       </>
     ))
 
     return (
     <Table.Tr key={order._id}>
       <Table.Td>
-        <Group gap="sm">
-          <div>
-            <Text fz="sm" fw={500}>
-              {order_laptops}
-            </Text>
-            {/* <Text c="dimmed" fz="xs">
-              {item.job}
-            </Text> */}
-          </div>
-        </Group>
+        {order_laptops}
+        <Text fz="xs" c="dimmed">
+          Order
+        </Text>
       </Table.Td>
       {/* <Table.Td>
         <Text fz="sm">{}</Text>
@@ -88,9 +40,12 @@ export function OrdersStack() {
         </Text>
       </Table.Td> */}
       <Table.Td>
-        <Text fz="sm">${order.total_price} / hr</Text>
+        <Text fz="sm">{new Intl.NumberFormat('ru-KZ', {
+                        style: "currency",
+                        currency: "KZT"
+        }).format(order.total_price)}</Text>
         <Text fz="xs" c="dimmed">
-          Rate
+          Total price
         </Text>
       </Table.Td>
       <Table.Td>

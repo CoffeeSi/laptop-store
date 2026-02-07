@@ -11,7 +11,7 @@ export const useOrders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const data = await orderApi.fetchOrders();
+                const data = await orderApi.fetchOrders();                
                 setOrders(data);
             } catch (err) {
                 if (err instanceof AxiosError) {

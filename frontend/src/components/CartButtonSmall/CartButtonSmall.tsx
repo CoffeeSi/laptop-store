@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 
-export function CartButtonSmall({function_}: {function_: Function}) {
+export function CartButtonSmall({isDisabled, function_}: {isDisabled: boolean, function_: Function}) {
   const [isToggled, setIsToggled]  = useState(false);
   return (
     <>
@@ -12,7 +12,7 @@ export function CartButtonSmall({function_}: {function_: Function}) {
       Go to cart
       </Button>
     ) : (
-      <Button radius="xl" onClick={() => {function_(); setIsToggled(true);}} style={{ flex: 1 }}>
+      <Button radius="xl" disabled={isDisabled} onClick={() => {function_(); setIsToggled(true);}} style={{ flex: 1 }}>
         Buy now
       </Button>
     )}

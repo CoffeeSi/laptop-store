@@ -26,8 +26,8 @@ function NotFoundPage() {
               page has been moved to another URL. If you think this is an error contact support.
             </Text>
             <Group justify="center">
-              <Button size="md">
-                <Link to="/">Take me back to home page</Link>
+              <Button component={Link} to='/' size="md">
+                Take me back to home page
               </Button>
             </Group>
           </div>

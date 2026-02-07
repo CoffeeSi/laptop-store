@@ -1,6 +1,12 @@
 import mongoose from "mongoose"
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
+
+export const listOrders = async (user_id) => {
+    const orders = Order.find({"user_id": user_id}).populate("items.laptop_id")
+    return orders
+}
+
 export const createOrder = async (dataSet) =>{
 
     const {items,user_id} = dataSet

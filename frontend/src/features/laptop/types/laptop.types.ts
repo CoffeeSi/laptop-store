@@ -3,7 +3,7 @@ import type { IBrand } from "@/features/brand/types/brand.types";
 export interface ILaptopSpecifications {
     cpu: string,
     gpu: string,
-    ram: string,
+    ram: number,
     storage: string,
 }
 
@@ -12,9 +12,7 @@ export interface ILaptop {
     model_name: string,
     price: number,
     brand_id: IBrand,
-    specifications: [
-        ILaptopSpecifications
-    ],
+    specifications: ILaptopSpecifications,
     stock_quantity: number,
     imgUrl: string,
 }
