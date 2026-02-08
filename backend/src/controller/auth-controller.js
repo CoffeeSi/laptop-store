@@ -26,22 +26,31 @@ async function registerUser(req, res) {
 }
 
 async function loginUser(req, res) {
-    const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-    const user = await loginUserService({ email, password });
+        const user = await loginUserService({ email, password });
 
-    if (!user) {
-        return res.status(401).json({ message: 'Invalid credentials' });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        req.session.isLoggedIn = true;
+        req.session.userID = user._id.toString();
+        req.session.role = user.role;
+        
+        return res.status(200).json({ 
+            message: 'Login successful',
+            userID: user._id.toString(),
+            role: user.role
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ 
+            message: 'Error during login',
+            error: error.message 
+        });
     }
-
-    req.session.isLoggedIn = true;
-    req.session.userID = user._id.toString();
-    req.session.role = user.role;
-    
-    return res.status(200).json({ 
-        message: 'Login successful',
-        userID: user._id.toString()
-    });
 }
 
 async function logoutUser(req, res) {
@@ -55,10 +64,22 @@ async function logoutUser(req, res) {
 }
 
 async function authStatus(req, res) {
-    if (req.session.isLoggedIn) {
-        return res.status(200).json({ isLoggedIn: true, userID: req.session.userID });
-    } else {
-        return res.status(401).json({ isLoggedIn: false });
+    try {
+        if (req.session && req.session.isLoggedIn) {
+            return res.status(200).json({ 
+                isLoggedIn: true, 
+                userID: req.session.userID, 
+                role: req.session.role 
+            });
+        } else {
+            return res.status(200).json({ isLoggedIn: false });
+        }
+    } catch (error) {
+        console.error('Auth status error:', error);
+        return res.status(500).json({ 
+            message: 'Error checking auth status',
+            error: error.message 
+        });
     }
 }
 

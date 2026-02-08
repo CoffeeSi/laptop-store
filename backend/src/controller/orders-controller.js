@@ -69,7 +69,9 @@ export const patchOrderItems = async(req,res,next)=>{
 export const getOrders = async (req, res, next) => {
   try {
     const user_id = req.session.userID;
-    const orders = await listOrders(user_id)
+    const role = req.session.role;
+    
+    const orders = await listOrders(role === 'admin' ? null : user_id)
     res.json(orders)
   } catch (err) {
     next(err)

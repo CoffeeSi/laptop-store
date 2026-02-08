@@ -1,5 +1,5 @@
 
-import {registerBrand, getBrandStatistics, getAllBrands} from "../services/brand-service.js"
+import {registerBrand, getBrandStatistics, getAllBrands, deleteBrand as removeBrand} from "../services/brand-service.js"
 import { createBrandDTO } from "./dto/create-brand.js"
 export const addBrand = async (req, res, next) =>{
 
@@ -26,7 +26,7 @@ export const addBrand = async (req, res, next) =>{
 export const deleteBrand = async (req,res,next)=>{
 
     try{
-        const deletedBrand = deleteBrand({brand_id : req.params})
+        const deletedBrand = await removeBrand({brand_id : req.params.id})
 
         return res.status(200).json(deletedBrand)
     }catch(err){

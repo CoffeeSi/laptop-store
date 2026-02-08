@@ -10,6 +10,7 @@ import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
 import PrivateRoute from './PrivateRoute';
 import ProfilePage from '@/pages/ProfilePage/ProfilePage';
 import SearchPage from '@/pages/SearchPage/SearchPage';
+import AdminPage from '@/pages/AdminPage/AdminPage';
 
 export const AppRouter = () => (
     <Routes>
@@ -22,5 +23,6 @@ export const AppRouter = () => (
         <Route path={PATHS.NOT_FOUND} element={<NotFoundPage />} />
         <Route path={PATHS.PROFILE} element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
         <Route path={PATHS.CART} element={<PrivateRoute><CartPage /></PrivateRoute>} />
+        <Route path={PATHS.ADMIN} element={<PrivateRoute requiredRole="admin"><AdminPage /></PrivateRoute>} />
     </Routes>
 )

@@ -20,7 +20,7 @@ async function registerUserService({ full_name, email, password, phone, address 
 }
 
 async function loginUserService({ email, password }) {
-    const user = await Customer.findOne({ email }, { password: 1, email: 1 }).lean().exec();
+    const user = await Customer.findOne({ email }, { password: 1, email: 1, role: 1 }).lean().exec();
 
     if (!user) {
         return null;

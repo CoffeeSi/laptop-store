@@ -9,5 +9,9 @@ export const orderApi = {
     fetchOrders: async (): Promise<IOrder[]> => {
         const response = await request.get("/orders");
         return response.data
+    },
+    refundItem: async (orderId: string, laptopId: string): Promise<IOrder> => {
+        const response = await request.patch(`/orders/${orderId}/refund`, { laptop_id: laptopId });
+        return response.data;
     }
 }

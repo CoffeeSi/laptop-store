@@ -16,7 +16,7 @@ export function useAuth() {
         authApi.getAuthStatus()
             .then(data => {
                 if (data.isLoggedIn) {                    
-                    setAuth(data.userID);
+                    setAuth(data.userID, data.role);
                     fetchUser(data.userID)
                 } else {
                     clearAuth();
