@@ -82,13 +82,28 @@ export const patchOrderItems = async(req,res,next)=>{
 
 }
 
-export const getOrders = async (req, res, next) => {
+export const getOrdersByUserID = async (req, res, next) => {
   try {
     const user_id = req.session.userID;
     const role = req.session.role;
     
-    const orders = await listOrders(role === 'admin' ? null : user_id)
+    const orders = await getOrdersByUserID(user_id)
     res.json(orders)
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getAllOrders = async (req, res, next) => {
+  try {
+    const user_id = req.session.userID;
+    const role = req.session.role;
+    if (role !== "admin"){
+      return res.status(403).json({message : "Forbidden"})
+    }
+
+    const orders = await listOrders();
+    res.json(orders);
   } catch (err) {
     next(err)
   }

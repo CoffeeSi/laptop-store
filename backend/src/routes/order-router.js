@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { addOrder,  getOrders,  patchOrderItems, patchOrderStatus } from "../controller/orders-controller.js"
+import { addOrder,  listOrders, getOrdersByUserID, patchOrderItems, patchOrderStatus } from "../controller/orders-controller.js"
 import { validateId } from "../middleware/validate-id.js"
 import { protect, restrictTo } from "../middleware/role-validator.js"
 
@@ -7,7 +7,8 @@ const order_router = Router()
 
 order_router.post("/", protect, addOrder)
 
-order_router.get("/", protect, getOrders)
+order_router.get("/", protect, getOrdersByUserID)
+order_router.get("/all/", protect, restrictTo("admin"), listOrders)
 
 //patch status
 order_router.patch("/:id/status", protect, restrictTo("admin"),validateId, patchOrderStatus)

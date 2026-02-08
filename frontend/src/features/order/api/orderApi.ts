@@ -6,7 +6,7 @@ export const orderApi = {
         const response = await request.post("/orders", orderData);
         return response;
     }, 
-    fetchOrders: async (): Promise<IOrder[]> => {
+    fetchOrdersByUserID: async (): Promise<IOrder[]> => {
         const response = await request.get("/orders");
         return response.data
     },
