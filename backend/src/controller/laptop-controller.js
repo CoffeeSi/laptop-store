@@ -89,21 +89,15 @@ export const getLaptopById = async(req,res,next)=>{
 
 export const getLaptops = async (req,res,next)=>{
     try{        
-        let ramObj = {}
-        if (req.query.ram) {
-            try {
-                ramObj = JSON.parse(req.query.ram)
-            } catch (e) {
-                console.error("Error parsing RAM:", e)
-            }
-        }
-        
+        const parsedQuery = getLaptopsQuerySchema.parse(req.query)
+
         const dataSet = {
-            brands : req.query.brands,
-            gpus : req.query.gpus,
-            cpus : req.query.cpus,
-            storage: req.query.storage,
-            ram : ramObj
+        brands: parsedQuery.brands,
+        gpus: parsedQuery.gpus,
+        cpus: parsedQuery.cpus,
+        storage: parsedQuery.storage,
+        ram: parsedQuery.ram,
+        page: parsedQuery.page
         }
         const filtered = await retrieveLaptops(dataSet)
         res.status(200).json(filtered)

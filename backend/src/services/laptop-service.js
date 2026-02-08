@@ -99,7 +99,13 @@ export const getOneLaptop = async (dataSet)=>{
 
 export const retrieveLaptops = async (dataSet)=>{
     //validation ? 
-    const { brands, gpus, cpus, storage, ram } = dataSet
+    const { brands, gpus, cpus, storage, ram , page} = dataSet
+    const pageNumber = Math.max(1, Number(page) || 1)
+    const laptopsOnPage = 20
+    const skipCount = (pageNumber - 1) * laptopsOnPage
+    if (!Number.isInteger(pageNumber) || pageNumber < 1) {
+        throw new Error("Invalid page number")
+    }
     const brandsArray = brands ? Array.from(brands.split(',')) : []
     const cpuArray = cpus ? Array.from(cpus.split(',')) : []
     const gpuArray = gpus ? Array.from(gpus.split(',')) : []
@@ -137,6 +143,6 @@ export const retrieveLaptops = async (dataSet)=>{
         filter["specifications.ram"] = ramFilter
     }
         
-    const filtered = await Laptop.find(filter).populate("brand_id", "brand_name")
+    const filtered = await Laptop.find(filter).populate("brand_id", "brand_name").sort({stock_quantity : -1}).skip(skipCount).limit(laptopsOnPage)
     return filtered
 }
