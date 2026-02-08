@@ -27,7 +27,7 @@ export const useOrderStore = create(
                 get().updateOrder({
                     ...data,
                     status: "pending",
-                    order_date: new Date()
+                    order_date: new Date(),
                 });
                 const order = get().orderData;
                 if (order.items.length === 0) {
@@ -42,7 +42,7 @@ export const useOrderStore = create(
                     items: [],
                     total_price: 0,
                     status: "pending",
-                    order_date: new Date()
+                    order_date: new Date(),
                 });
             }
         }), { name: "order-storage" }

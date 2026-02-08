@@ -1,5 +1,6 @@
 import * as z from "zod"
 import { getUserDataById, getUserOrders } from "../services/user-service.js"
+import { request } from "express"
 
 // pod voprosom
 export const patchUser = async(req,res,next)=>{
@@ -35,7 +36,7 @@ export const patchUser = async(req,res,next)=>{
 
 export const getUserById = async(req,res,next)=>{
     try{
-        const data = await getUserDataById({user_id : req.params.id})
+        const data = await getUserDataById({user_id : req.params.id, requester_id : req.session.userID})
         return res.status(200).json(data)
 
     }catch(err){

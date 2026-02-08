@@ -1,7 +1,7 @@
 import type { ILaptop } from "@/features/laptop/types/laptop.types"
 
 export interface IOrder {
-    _id: string,
+    _id?: string,
     user_id: string | null,
     items: IOrderItem[],
     total_price: number,
@@ -10,7 +10,6 @@ export interface IOrder {
 }
 
 export interface IOrderItem {
-    // laptop_id: string,
     laptop_id: ILaptop,
     quantity: number,
     unit_price: number
