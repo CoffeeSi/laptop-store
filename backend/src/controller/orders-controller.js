@@ -13,7 +13,6 @@ export const addOrder = async (req, res, next) => {
     if (err.message == "order items required"){
       return res.status(400).json("order items are empty")
     }
-<<<<<<< HEAD
     if (err.message === "not in stock"){
       return res.status(400).json({message : "not in stock"})
     }
@@ -25,11 +24,6 @@ export const addOrder = async (req, res, next) => {
 
       return res.status(400).json("laptop not found")
 
-=======
-    if (err.message == "laptop not found"){
-
-      res.status(400).json("laptop not found")
->>>>>>> 448fc79150f6d68eebd7a4f0a2646ddd4575f7ef
     }
     if (err instanceof z.ZodError){
       return res.status(400).json({message : "Bad request data"})
@@ -51,13 +45,10 @@ export const patchOrderStatus = async(req,res,next)=>{
     if (err.message == "Order not found"){
       return res.status(404).json({message : "Order not found"})
     }
-<<<<<<< HEAD
       if(err.message == "invalid id"){
           return res.status(400).json({ message: "invalid id"})
       }
   
-=======
->>>>>>> 448fc79150f6d68eebd7a4f0a2646ddd4575f7ef
     next(err)
   }
 }
@@ -82,13 +73,10 @@ export const patchOrderItems = async(req,res,next)=>{
 
       return res.status(404).json({message : "Order not found"})
     }
-<<<<<<< HEAD
     if(err.message == "invalid id"){
         return res.status(400).json({ message: "invalid id"})
     }
 
-=======
->>>>>>> 448fc79150f6d68eebd7a4f0a2646ddd4575f7ef
     next(err)
   }
 
