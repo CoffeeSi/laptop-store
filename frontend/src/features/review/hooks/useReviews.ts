@@ -16,7 +16,6 @@ export const useCreateReview = () => {
     return useMutation({
         mutationFn: (payload: ICreateReviewPayload) => reviewApi.createReview(payload),
         onSuccess: (_, variables) => {
-            // Invalidate reviews query for this laptop
             queryClient.invalidateQueries({ queryKey: ['reviews', variables.laptop_id] });
         },
     });
@@ -28,7 +27,6 @@ export const useDeleteReview = () => {
     return useMutation({
         mutationFn: (reviewId: string) => reviewApi.deleteReview(reviewId),
         onSuccess: () => {
-            // Invalidate all reviews queries
             queryClient.invalidateQueries({ queryKey: ['reviews'] });
         },
     });

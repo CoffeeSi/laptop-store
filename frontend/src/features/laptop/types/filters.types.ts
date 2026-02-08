@@ -4,7 +4,7 @@ export interface IFilters {
     cpus: string[];
     gpus: string[];
     storage: string[];
-    ram: {
+    ram?: {
         min: number,
         max: number
     }

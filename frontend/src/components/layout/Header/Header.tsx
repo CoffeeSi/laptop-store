@@ -3,6 +3,7 @@ import {
   IconSearch,
   IconShoppingCart,
   IconUser,
+  IconBuildingStore,
 } from '@tabler/icons-react';
 import {
   Box,
@@ -35,11 +36,14 @@ export function Header() {
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
           <Text size="xl" fw={600} component={Link} to="/" className={classes.logo}>
-            LaptopShop
+            Laptop Store
           </Text>
 
           <Group visibleFrom='sm'>
-          <Link to='/search' className={classes.link}>
+          <Link to='/brands' className={classes.link} title="Brands">
+            <IconBuildingStore size={24} />
+          </Link>
+          <Link to='/search' className={classes.link} title="Search">
             <IconSearch size={24} />
           </Link>
           {isLoggedIn ? (
@@ -89,18 +93,22 @@ export function Header() {
       >
         <ScrollArea h="calc(100vh - 80px)" mx="-md">
           <Divider my="sm" />
+          <Group justify="center" grow pb="xl" px="md">
+            <Button variant="light" component={Link} to='/brands' onClick={closeDrawer}>Brands</Button>
+            <Button variant="light" component={Link} to='/search' onClick={closeDrawer}>Search</Button>
+          </Group>
 
           <Divider my="sm" />
           <Group justify="center" grow pb="xl" px="md">
           {isLoggedIn ? (
             <>
-              <Button variant="default" component={Link} to='/profile'>Profile</Button>
-              <Button onClick={logout}>Log out</Button>
+              <Button variant="default" component={Link} to='/profile' onClick={closeDrawer}>Profile</Button>
+              <Button onClick={() => { logout(); closeDrawer(); }}>Log out</Button>
             </>
           ) : (
             <>
-              <Button variant="default" component={Link} to="/login">Log in</Button>
-              <Button component={Link} to="/register">Sign up</Button>
+              <Button variant="default" component={Link} to="/login" onClick={closeDrawer}>Log in</Button>
+              <Button component={Link} to="/register" onClick={closeDrawer}>Sign up</Button>
             </>
           )}
           </Group>

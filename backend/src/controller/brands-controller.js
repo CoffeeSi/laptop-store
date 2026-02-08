@@ -1,4 +1,6 @@
 
+import mongoose from "mongoose"
+import Brand from "../model/brand-model.js"
 import {registerBrand, getBrandStatistics, getAllBrands, deleteBrand as removeBrand} from "../services/brand-service.js"
 import { createBrandDTO } from "./dto/create-brand.js"
 export const addBrand = async (req, res, next) =>{
@@ -53,23 +55,25 @@ export const getBrands = async(req,res,next)=>{
     }
 
 }
-// export const getBrandById = async(req,res,next)=>{
-//     try{
+export const getBrandById = async(req,res,next)=>{
+    try{
+        const brand_id = req.params.id
+        if (!mongoose.Types.ObjectId.isValid(brand_id)){
+            throw new Error("invalid id")
+        }
+        const brand = await Brand.findById(brand_id)
+        if (!brand){
+            return res.status(404).json({message : "brand not found"})
+        }
+        return res.status(200).json(brand)
 
-//         const brand = await Brand.findById(id)
-//         if (!brand){
-//             return res.status(404).json({message : "brand not found"})
-//         }
-//         return res.status(200).json(brand)
-
-//     }catch(err){
-//         if(err.message == "invalid id"){
-//             return res.status(400).json({ message: "invalid id"})
-//         }
-//         next(err)
-//     }
-
-// }
+    }catch(err){
+        if(err.message == "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
+        }
+        next(err)
+    }
+}
 
 export const getBrandStats = async (req,res,next) =>{
     try{

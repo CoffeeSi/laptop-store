@@ -1,15 +1,18 @@
 import { Header } from '@/components/layout/Header/Header';
 import classes from './SearchPage.module.css';
-import { Card, Grid, GridCol, Text, Stack, Title, Button, MultiSelect, RangeSlider } from '@mantine/core';
+import { Card, Grid, GridCol, Text, Stack, Title, Button, MultiSelect, RangeSlider, Pagination, Center } from '@mantine/core';
 import { useBrands } from '@/features/brand/hooks/useBrands';
 import { useFilters } from '@/features/laptop/hooks/useFilters';
 import { LaptopCards } from '@/features/laptop/components/LaptopCard/LaptopCards';
+import { useLaptops } from '@/features/laptop/hooks/useLaptops';
 import { useState } from 'react';
 import type { IFilters } from '@/features/laptop/types/filters.types';
 
 function SearchPage() {
   const { brands, isLoading } = useBrands();
   const [filters, setFilters] = useState<IFilters>();
+  const [activePage, setPage] = useState(1);
+  const { totalPages } = useLaptops(filters, activePage);
   const filtersList = useFilters();
 
   const [brand, setBrand] = useState<string[]>();
@@ -25,16 +28,17 @@ function SearchPage() {
       cpus: cpu || [],
       gpus: gpu || [],
       ram: {
-        min: minRam !== undefined ? minRam : filtersList?.ram.min || 0,
-        max: maxRam !== undefined ? maxRam : filtersList?.ram.max || 0
+        min: minRam !== undefined ? minRam : filtersList?.ram?.min || 0,
+        max: maxRam !== undefined ? maxRam : filtersList?.ram?.max || 0
       },
       storage: storage || []
     };
     setFilters(newFilters);
+    setPage(1);
   }
 
   if (isLoading) {
-    return 123;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -67,13 +71,13 @@ function SearchPage() {
               <RangeSlider
                 color="blue"
                 marks={[
-                  {label: filtersList?.ram.min, value: filtersList?.ram.min || 0},
-                  {label: filtersList?.ram.max, value: filtersList?.ram.max || 0}
+                  {label: filtersList?.ram?.min, value: filtersList?.ram?.min || 0},
+                  {label: filtersList?.ram?.max, value: filtersList?.ram?.max || 0}
                 ]}
                 step={1}
                 minRange={4}
-                min={filtersList?.ram.min}
-                max={filtersList?.ram.max}
+                min={filtersList?.ram?.min}
+                max={filtersList?.ram?.max}
                 onChange={(value) => {
                   setMinRam(value[0]);
                   setMaxRam(value[1]);
@@ -90,11 +94,23 @@ function SearchPage() {
           </Card>
         </GridCol>
         <GridCol span={{base: 12, md: 9}}>
-          <Card withBorder radius="md" p={20}>
-            <Grid justify="start" gutter="xl">
-              <LaptopCards filters={filters} />
-            </Grid>
-          </Card>
+          <Stack>
+            <Card withBorder radius="md" p={20}>
+              <Grid justify="start" gutter="xl">
+                <LaptopCards filters={filters} page={activePage} />
+              </Grid>
+            </Card>
+            {totalPages > 1 && (
+              <Center>
+                <Pagination 
+                  total={totalPages} 
+                  value={activePage} 
+                  onChange={setPage} 
+                  my="md" 
+                />
+              </Center>
+            )}
+          </Stack>
         </GridCol>
       </Grid>
     </>
