@@ -1,0 +1,24 @@
+.card {
+  display: flex !important;
+  flex-direction: row !important;
+  background-color: var(--mantine-color-body);
+}
+
+.image {
+  max-width: 220px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.2em;
+  font-family: Outfit, var(--mantine-font-family);
+  line-height: 1.2;
+  color: var(--mantine-color-bright);
+}
+
+.body {
+  padding: var(--mantine-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em !important;
+}

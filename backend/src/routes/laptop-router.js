@@ -1,22 +1,24 @@
 import { Router } from "express"
-import {addLaptop, deleteLaptop, patchLaptop, getLaptops, getLaptopById} from "../controller/laptop-controller.js"
+import {addLaptop, deleteLaptop, getLaptops, getLaptopById, getFilters, updateStock} from "../controller/laptop-controller.js"
+import { protect, restrictTo } from "../middleware/role-validator.js"
 
-import { validateId } from "../middleware/validate-id.js"
-import { brandExists } from "../middleware/brand-exists.js"
+import { validateId} from "../middleware/validate-id.js"
 
-const router = Router()
+const laptop_router = Router()
 
 // GET
-router.get("/laptops", getLaptops)
-router.get("/laptops/:id", validateId, getLaptopById)
-
+//laptop_router.get("/", getLaptops)
+laptop_router.get("/id/:id", getLaptopById)
+laptop_router.get("/", getLaptops)
+// laptop_router.get("/filter", getFilteredLaptops)
+laptop_router.get("/filterParams", getFilters)
 // POST
-router.post("/laptops", brandExists, addLaptop)
+laptop_router.post("/", protect, restrictTo("admin"), addLaptop)
 
 // PATCH
-router.patch("/laptops/:id", validateId, brandExists, patchLaptop)
+laptop_router.patch("/:id/stock", protect, restrictTo("admin"), validateId, updateStock)
 
 // DELETE
-router.delete("/laptops/:id", validateId, deleteLaptop)
+laptop_router.delete("/:id", protect, restrictTo("admin"), validateId, deleteLaptop)
 
-export default router
+export default laptop_router;

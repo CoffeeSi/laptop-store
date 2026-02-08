@@ -1,9 +1,14 @@
 import { Router } from "express"
-import { addReview, getReviews } from "../controller/review-controller.js"
+import { addReview, deleteReview, getReviewsByLaptop } from "../controller/review-controller.js"
+import { validateId } from "../middleware/validate-id.js"
+import { protect} from "../middleware/role-validator.js"
 
-const router = Router()
+const review_router = Router()
 
-router.post("/reviews", addReview)
-router.get("/reviews", getReviews)
+review_router.post("/", protect, addReview)
 
-export default router
+review_router.get("/laptop/:laptopId", getReviewsByLaptop)
+
+review_router.delete("/:id", protect, validateId, deleteReview)
+
+export default review_router

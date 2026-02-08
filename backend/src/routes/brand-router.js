@@ -1,19 +1,24 @@
 import {Router} from "express"
 
-import {addBrand, deleteBrand, patchBrand, getBrands, getBrandById} from "../controller/brands-controller.js"
+import {addBrand, deleteBrand, getBrands, getBrandStats, getBrandById} from "../controller/brands-controller.js"
 import {validateId} from "../middleware/validate-id.js"
+import { protect, restrictTo } from "../middleware/role-validator.js"
 
-const router = Router()
+const brand_router = Router()
 
 //POST
-router.post("/brands", addBrand)
+brand_router.post("/", protect, restrictTo("admin"), addBrand)
 
 //GET
-router.get("/brands", getBrands)
-router.get("/users/:id", validateId, getBrandById)
+brand_router.get("/", getBrands)
+brand_router.get("/stats/:id", validateId, getBrandStats)
+brand_router.get("/:id", validateId, getBrandById)
+
 
 //PATCH
-router.patch("/users/:id", validateId, patchBrand)
+//brand_router.patch("/brands/:id", validateId, patchBrand)
 
 //DELETE
-router.delete("/users/:id", validateId, deleteBrand)
+brand_router.delete("/brands/:id", protect,validateId,restrictTo("admin"), deleteBrand)
+
+export default brand_router
