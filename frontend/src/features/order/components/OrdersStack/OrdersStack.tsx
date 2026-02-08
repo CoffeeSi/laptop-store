@@ -58,7 +58,7 @@ export function OrdersStack() {
                     size="xs"
                     variant="light"
                     color="red"
-                    onClick={() => handleRefund(order._id, item.laptop_id._id, item.laptop_id.model_name)}
+                    onClick={() => handleRefund(order._id!, item.laptop_id._id, item.laptop_id.model_name)}
                     loading={isPending}
                   >
                     Refund

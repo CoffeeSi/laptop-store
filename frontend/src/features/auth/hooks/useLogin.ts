@@ -17,8 +17,8 @@ export const useLogin = () => {
 
         try {
             const data = await authApi.login(payload);
-            const userID = data.data.userID;
-            const role = data.data.role;
+            const userID = data.userID;
+            const role = data.role;
             setUser(userID, role);
             await fetchUser(userID);
         } catch (err: unknown) {
