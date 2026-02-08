@@ -16,3 +16,11 @@ export interface ILaptop {
     stock_quantity: number,
     imgUrl: string,
 }
+
+export interface ILaptopsResponse {
+    laptops: ILaptop[];
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+    laptopsPerPage: number;
+}

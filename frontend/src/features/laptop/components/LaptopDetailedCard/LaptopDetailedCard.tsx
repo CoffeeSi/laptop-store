@@ -1,9 +1,9 @@
 import { Card, Text, Title, Image, Stack, Table, Grid, GridCol } from "@mantine/core";
-import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLaptop } from "../../hooks/useLaptop";
 
 function LaptopDetailedCard({ laptopID }: { laptopID: string }) {
-  const { laptop, isLoading } = useLaptop(laptopID);  
+  const { laptop } = useLaptop(laptopID);  
 
   // if (!isLoading && !laptop) {
   //     return (
@@ -31,9 +31,16 @@ function LaptopDetailedCard({ laptopID }: { laptopID: string }) {
         </GridCol>
         <GridCol span={{base: 12, sm: 6}}>
         <Stack ml={30} align="flex-start">
-          <Title tt="uppercase" fz="1.5em" fw={700}>
-            {laptop?.brand_id.brand_name}
-          </Title>
+          {laptop?.brand_id && (
+            <Link 
+              to={`/brand/${laptop.brand_id._id}`} 
+              style={{ textDecoration: 'none' }}
+            >
+              <Title tt="uppercase" fz="1.5em" fw={700} c="blue" style={{ cursor: 'pointer' }}>
+                {laptop.brand_id.brand_name}
+              </Title>
+            </Link>
+          )}
           <Title order={2} fz="xl" fw={600}>
             {laptop?.model_name}
           </Title>

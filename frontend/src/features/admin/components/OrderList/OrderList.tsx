@@ -98,7 +98,7 @@ export const OrderList = () => {
                   size="xs"
                   value={order.status}
                   onChange={(value) =>
-                    value && handleStatusChange(order._id, value as any)
+                    value && handleStatusChange(order._id, value as 'pending' | 'shipping' | 'delievered')
                   }
                   data={[
                     { value: 'pending', label: 'Pending' },

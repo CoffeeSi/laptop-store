@@ -1,4 +1,5 @@
-import {uniqueComponents, createLaptop, getOneLaptop, removeLaptop, retrieveLaptops, updateLaptopStock } from "../services/laptop-service.js"
+import { uniqueComponents, createLaptop, getOneLaptop, removeLaptop, retrieveLaptops, updateLaptopStock } from "../services/laptop-service.js"
+import { getLaptopsQuerySchema } from "./dto/filter-request.js"
 import { createLaptopDTO } from "./dto/create-laptop.js"
 import * as z from "zod"
 export const addLaptop = async (req,res,next)=>{
@@ -99,8 +100,8 @@ export const getLaptops = async (req,res,next)=>{
         ram: parsedQuery.ram,
         page: parsedQuery.page
         }
-        const filtered = await retrieveLaptops(dataSet)
-        res.status(200).json(filtered)
+        const result = await retrieveLaptops(dataSet)
+        res.status(200).json(result)
     } catch(err){
         next(err)
     }

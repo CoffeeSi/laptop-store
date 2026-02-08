@@ -43,32 +43,110 @@ export const getBrandStatistics = async (dataSet) =>{
         throw new Error("brand dne")
     }
     
-    let stats = await Review.aggregate([
-
-        {$lookup : {
-
-            from : "laptops",
-            localField : "laptop_id",
-            foreignField : "_id",
-            as :"laptop_info"
-
-        }},
-
-        {$unwind : "$laptop_info"},
+    const totalLaptops = await Laptop.countDocuments({ brand_id: brandObjectId });
+    
+    let reviewStats = await Review.aggregate([
+        {
+            $lookup: {
+                from: "laptops",
+                localField: "laptop_id",
+                foreignField: "_id",
+                as: "laptop_info"
+            }
+        },
+        {
+            $unwind: "$laptop_info"
+        },
         {
             $match: { "laptop_info.brand_id": brandObjectId }
         },
-
         {
-            $group : {_id : "$laptop_info.brand_id", avg : {$avg : "$rating"}, min : {$min : "$rating"}, max : {$max : "$rating"}}
+            $group: {
+                _id: "$laptop_info.brand_id",
+                avgRating: { $avg: "$rating" },
+                minRating: { $min: "$rating" },
+                maxRating: { $max: "$rating" },
+                totalReviews: { $sum: 1 },
+                ratings: { $push: "$rating" }
+            }
         },
+        {
+            $project: {
+                _id: 1,
+                avgRating: { $round: ["$avgRating", 2] },
+                minRating: 1,
+                maxRating: 1,
+                totalReviews: 1,
 
-    ])
+                fiveStarCount: {
+                    $size: {
+                        $filter: {
+                            input: "$ratings",
+                            as: "rating",
+                            cond: { $eq: ["$$rating", 5] }
+                        }
+                    }
+                },
+                fourStarCount: {
+                    $size: {
+                        $filter: {
+                            input: "$ratings",
+                            as: "rating",
+                            cond: { $eq: ["$$rating", 4] }
+                        }
+                    }
+                },
+                threeStarCount: {
+                    $size: {
+                        $filter: {
+                            input: "$ratings",
+                            as: "rating",
+                            cond: { $eq: ["$$rating", 3] }
+                        }
+                    }
+                },
+                twoStarCount: {
+                    $size: {
+                        $filter: {
+                            input: "$ratings",
+                            as: "rating",
+                            cond: { $eq: ["$$rating", 2] }
+                        }
+                    }
+                },
+                oneStarCount: {
+                    $size: {
+                        $filter: {
+                            input: "$ratings",
+                            as: "rating",
+                            cond: { $eq: ["$$rating", 1] }
+                        }
+                    }
+                }
+            }
+        }
+    ]);
 
-
+    if (!reviewStats || reviewStats.length === 0) {
+        return {
+            _id: brandObjectId,
+            avgRating: 0,
+            minRating: 0,
+            maxRating: 0,
+            totalReviews: 0,
+            totalLaptops,
+            fiveStarCount: 0,
+            fourStarCount: 0,
+            threeStarCount: 0,
+            twoStarCount: 0,
+            oneStarCount: 0
+        };
+    }
     
-    return stats[0] 
-
+    return {
+        ...reviewStats[0],
+        totalLaptops
+    };
 }
 
 export const getAllBrands = async (dataSet)=>{

@@ -3,6 +3,7 @@ import { PATHS } from '@/shared/routes/routePaths';
 import HomePage from '@/pages/HomePage/HomePage'
 import LaptopPage from '@/pages/LaptopPage/LaptopPage';
 import BrandPage from '@/pages/BrandPage/BrandPage';
+import BrandsPage from '@/pages/BrandsPage/BrandsPage';
 import CartPage from '@/pages/CartPage/CartPage';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 import RegisterPage from '@/pages/RegisterPage/RegisterPage';
@@ -16,6 +17,7 @@ export const AppRouter = () => (
     <Routes>
         <Route path={PATHS.HOME} element={<HomePage />} />
         <Route path={PATHS.LAPTOP} element={<LaptopPage />} />
+        <Route path={PATHS.BRANDS} element={<BrandsPage />} />
         <Route path={PATHS.BRAND} element={<BrandPage />} />
         <Route path={PATHS.SEARCH} element={<SearchPage/>} />
         <Route path={PATHS.LOGIN} element={<LoginPage />} />

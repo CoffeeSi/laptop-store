@@ -4,6 +4,10 @@ import type { ICreateLaptopPayload, IAdminLaptop } from '../types/admin.types';
 export const adminLaptopApi = {
     getAllLaptops: async (): Promise<IAdminLaptop[]> => {
         const response = await apiClient.get('/laptops');
+        // Handle paginated response
+        if (response.data.laptops) {
+            return response.data.laptops;
+        }
         return response.data;
     },
     
