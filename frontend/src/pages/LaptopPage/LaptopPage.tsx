@@ -1,9 +1,10 @@
 import { Header } from "@/components/layout/Header/Header";
-import { Grid, GridCol, Stack } from "@mantine/core";
+import { Grid, GridCol } from "@mantine/core";
 import classes from "./LaptopPage.module.css";
 import { Navigate, useParams } from "react-router-dom";
 import LaptopDetailedCard from "@/features/laptop/components/LaptopDetailedCard/LaptopDetailedCard";
 import { LaptopDetailedPrice } from "@/features/laptop/components/LaptopDetailedPrice/LaptopDetailedPrice";
+import { Reviews } from "@/features/review/components/Reviews/Reviews";
 
 function LaptopPage() {
   const { laptopID } = useParams();
@@ -16,12 +17,13 @@ function LaptopPage() {
       <Header />
       <Grid className={classes.main}>
         <GridCol span={{base: 12, md: 8}}>
-          <Stack>
-            <LaptopDetailedCard laptopID={laptopID} />
-          </Stack>
+          <LaptopDetailedCard laptopID={laptopID} />
         </GridCol>
         <GridCol span={{base: 12, md: 4}}>
           <LaptopDetailedPrice laptopID={laptopID} /> 
+        </GridCol>
+        <GridCol span={{base: 12, md: 8}}>
+          <Reviews laptopId={laptopID} />
         </GridCol>
       </Grid>
     </>

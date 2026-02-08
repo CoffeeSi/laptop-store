@@ -1,5 +1,5 @@
 import { Router } from "express"
-import {addLaptop, deleteLaptop, getLaptops, getLaptopById, getFilters} from "../controller/laptop-controller.js"
+import {addLaptop, deleteLaptop, getLaptops, getLaptopById, getFilters, updateStock} from "../controller/laptop-controller.js"
 import { protect, restrictTo } from "../middleware/role-validator.js"
 
 import { validateId} from "../middleware/validate-id.js"
@@ -16,7 +16,7 @@ laptop_router.get("/filterParams", getFilters)
 laptop_router.post("/", protect, restrictTo("admin"), addLaptop)
 
 // PATCH
-//laptop_router.patch("/:id", validateId, brandExists, patchLaptop)
+laptop_router.patch("/:id/stock", protect, restrictTo("admin"), validateId, updateStock)
 
 // DELETE
 laptop_router.delete("/:id", protect, restrictTo("admin"), validateId, deleteLaptop)

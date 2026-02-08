@@ -1,5 +1,6 @@
-import {uniqueComponents, createLaptop, getOneLaptop, removeLaptop, retrieveLaptops } from "../services/laptop-service.js"
+import {uniqueComponents, createLaptop, getOneLaptop, removeLaptop, retrieveLaptops, updateLaptopStock } from "../services/laptop-service.js"
 import { createLaptopDTO } from "./dto/create-laptop.js"
+import * as z from "zod"
 export const addLaptop = async (req,res,next)=>{
 
     try{
@@ -101,6 +102,28 @@ export const getLaptops = async (req,res,next)=>{
         const filtered = await retrieveLaptops(dataSet)
         res.status(200).json(filtered)
     } catch(err){
+        next(err)
+    }
+}
+
+export const updateStock = async(req, res, next) =>{
+    try{
+        const { stock_quantity } = req.body
+        const laptop = await updateLaptopStock({
+            laptop_id: req.params.id,
+            stock_quantity
+        })
+        return res.status(200).json(laptop)
+    }catch(err){
+        if (err.message === "Laptop not found"){
+            return res.status(404).json({message : "Laptop not found"})
+        }
+        if(err.message === "invalid id"){
+            return res.status(400).json({ message: "invalid id"})
+        }
+        if(err.message === "invalid stock quantity"){
+            return res.status(400).json({ message: "invalid stock quantity"})
+        }
         next(err)
     }
 }

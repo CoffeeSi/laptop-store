@@ -9,6 +9,7 @@ function ProfilePage() {
     <>
     <Header />
       <Grid className={classes.main}>
+        
         <GridCol span={{base: 12, md: 8}}>
           <UserProfile />
         </GridCol>

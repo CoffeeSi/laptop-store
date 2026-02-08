@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import Laptop from "../model/laptop-model.js"
+import Brand from "../model/brand-model.js"
 
 
 export const createLaptop = async(dataSet)=>{
@@ -12,7 +13,7 @@ export const createLaptop = async(dataSet)=>{
 
     const exists = await Brand.exists({ _id: brand_id })
     if (!exists) {
-        return res.status(404).json({ message: "brand not found" })
+        throw new Error("brand not found")
     }
     const newLaptop = new Laptop({model_name, price, specifications, stock_quantity, brand_id})
 
@@ -32,6 +33,30 @@ export const removeLaptop = async(dataSet) =>{
         throw new Error("Laptop not found")
     }
     return deletedLaptop
+}
+
+export const updateLaptopStock = async(dataSet) =>{
+    const {laptop_id, stock_quantity} = dataSet
+    
+    if (!mongoose.Types.ObjectId.isValid(laptop_id)){
+        throw new Error("invalid id")
+    }
+    
+    if (typeof stock_quantity !== 'number' || stock_quantity < 0){
+        throw new Error("invalid stock quantity")
+    }
+    
+    const laptop = await Laptop.findByIdAndUpdate(
+        laptop_id, 
+        { stock_quantity }, 
+        { new: true, runValidators: true }
+    );
+    
+    if (!laptop){
+        throw new Error("Laptop not found")
+    }
+    
+    return laptop
 }
 
 
@@ -118,6 +143,6 @@ export const retrieveLaptops = async (dataSet)=>{
         filter["specifications.ram"] = ramFilter
     }
         
-    const filtered = await Laptop.find(filter).sort({stock_quantity : -1}).skip(skipCount).limit(laptopsOnPage)
+    const filtered = await Laptop.find(filter).populate("brand_id", "brand_name").sort({stock_quantity : -1}).skip(skipCount).limit(laptopsOnPage)
     return filtered
 }

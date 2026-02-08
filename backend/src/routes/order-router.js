@@ -10,9 +10,9 @@ order_router.post("/", protect, addOrder)
 order_router.get("/", protect, getOrders)
 
 //patch status
-order_router.patch("/:id", protect, restrictTo("admin"),validateId, patchOrderStatus)
+order_router.patch("/:id/status", protect, restrictTo("admin"),validateId, patchOrderStatus)
 
-//patch order items
-order_router.patch("/:id", protect, validateId, patchOrderItems)
+//refund item from order
+order_router.patch("/:id/refund", protect, validateId, patchOrderItems)
 
 export default order_router

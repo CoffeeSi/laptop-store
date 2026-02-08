@@ -5,7 +5,7 @@ import type { IRegisterPayload } from '../types/register.types';
 export const authApi = {
     login: async (credentials: ILoginPayload) => {
         const response = await apiClient.post('/auth/login', credentials);
-        return response;
+        return response.data;
     },
     
     register: async (userData: IRegisterPayload) => {

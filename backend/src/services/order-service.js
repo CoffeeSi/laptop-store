@@ -3,7 +3,14 @@ import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
 
 export const listOrders = async (user_id) => {
-    const orders = Order.find({"user_id": user_id}).populate("items.laptop_id")
+    if (user_id === null) {
+        const orders = await Order.find()
+            .populate("items.laptop_id", "model_name")
+            .populate("user_id", "full_name email");
+        return orders;
+    }
+    
+    const orders = await Order.find({"user_id": user_id}).populate("items.laptop_id")
     return orders
 }
 
@@ -64,7 +71,7 @@ export const changeOrderStatus = async (dataSet)=>{
     if (!mongoose.Types.ObjectId.isValid(order_id)){
             throw new Error("invalid id")
         }
-    const order = await Order.findByIdAndUpdate(id, {status},{new : true, runValidators : true})
+    const order = await Order.findByIdAndUpdate(order_id, {status},{new : true, runValidators : true})
     if (!order){
         throw new Error("Order not found")
     }
@@ -78,23 +85,44 @@ export const refundLaptop = async (dataSet) => {
     if (!mongoose.Types.ObjectId.isValid(order_id)){
         throw new Error("invalid id")
     }
-    if (!laptop_id || !id){
-        throw new error("bad data")
+    if (!laptop_id || !order_id){
+        throw new Error("bad data")
     }
-    const order = await Order.findById(id)
-    if (!order) throw new Error("Order not found")
-
-    const itemIndex = order.items.findIndex(item => item.laptop_id.toString() === laptop_id)
     
-    if (itemIndex > -1) {
-        const priceToSubtract = order.items[itemIndex].price
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    
+    try {
+        const order = await Order.findById(order_id).session(session)
+        if (!order) throw new Error("Order not found")
+
+        const itemIndex = order.items.findIndex(item => item.laptop_id.toString() === laptop_id)
+        
+        if (itemIndex === -1) {
+            throw new Error("Item not found in order")
+        }
+        
+        const refundedItem = order.items[itemIndex]
+        const priceToSubtract = refundedItem.unit_price * refundedItem.quantity
+
+        // Restore laptop stock
+        await Laptop.findByIdAndUpdate(
+            laptop_id,
+            { $inc: { stock_quantity: refundedItem.quantity } },
+            { session }
+        )
 
         order.total_price -= priceToSubtract
-
         order.items.splice(itemIndex, 1)
     
-        await order.save()
+        await order.save({ session })
+        await session.commitTransaction();
+        
+        return order;
+    } catch (err) {
+        await session.abortTransaction();
+        throw err;
+    } finally {
+        session.endSession();
     }
-
-    return order;
 };

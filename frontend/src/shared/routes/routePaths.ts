@@ -9,4 +9,6 @@ export const PATHS = {
     // PROTECTED
     PROFILE: '/profile',
     CART: '/cart',
+    // ADMIN
+    ADMIN: '/admin',
 };

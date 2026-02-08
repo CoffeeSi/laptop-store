@@ -14,11 +14,7 @@ function App() {
   const isLoading = useAuthStore(state => state.isLoading);
   
   if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        Загрузка...
-      </div>
-    );
+    return (<>Loading...</>);
   }
 
   return (
