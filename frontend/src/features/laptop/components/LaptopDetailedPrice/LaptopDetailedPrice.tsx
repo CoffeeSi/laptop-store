@@ -1,24 +1,25 @@
 import { Card, Flex, Text, Button } from "@mantine/core";
 import classes from "./LaptopDetailedPrice.module.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLaptop } from "../../hooks/useLaptop";
 import { useCartStore } from "@/features/cart/store/cartStore";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 export function LaptopDetailedPrice({ laptopID }: { laptopID: string }) {
   const addLaptop = useCartStore(state => state.addLaptop);
   const items = useCartStore(state => state.items);
   const [isToggled, setIsToggled] = useState(false);
-  const [isOutOfStock, setIsOutOfStock] = useState(false);
-  const { laptop, isLoading } = useLaptop(laptopID);
+  const { laptop } = useLaptop(laptopID);
 
-  useEffect(() => {
-    if (!isLoading && laptop && !laptop.stock_quantity) {
-      setIsOutOfStock(true);
-    } else if (laptop && (items[laptopID]?.quantity || 0) >= laptop.stock_quantity) {
-      setIsOutOfStock(true);
+  const isOutOfStock = useMemo(() => {
+    if (laptop && !laptop.stock_quantity) {
+      return true;
     }
-  }, [isLoading, laptop, items, laptopID]);
+    if (laptop && (items[laptopID]?.quantity || 0) >= laptop.stock_quantity) {
+      return true;
+    }
+    return false;
+  }, [laptop, items, laptopID]);
 
 
   // if (!laptop && !isLoading) {

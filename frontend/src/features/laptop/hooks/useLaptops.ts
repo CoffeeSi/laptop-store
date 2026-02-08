@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
 import { useQuery} from '@tanstack/react-query'
-import type { ILaptop } from "../types/laptop.types";
 import { laptopApi } from "../api/laptopApi";
 import type { IFilters } from "../types/filters.types";
 
-export function useLaptops(filters?: IFilters) {
+export function useLaptops(filters?: IFilters, page: number = 1) {
     const queryFilter = new URLSearchParams();
+    
+    queryFilter.set('page', page.toString());
     
     if (filters) {
         if (filters.brands?.length) {
@@ -29,12 +29,12 @@ export function useLaptops(filters?: IFilters) {
         queryKey: ['laptops', queryFilter.toString()],
         queryFn: () => laptopApi.fetchLaptops(queryFilter)
     })
-    
-    const [laptops, setLaptops] = useState<ILaptop[] | undefined>(data);
-    
-    useEffect(() => {
-        setLaptops(data);
-    }, [data])
 
-    return { laptops, isLoading };
+    return { 
+        laptops: data?.laptops, 
+        isLoading,
+        totalPages: data?.totalPages || 1,
+        currentPage: data?.currentPage || 1,
+        totalCount: data?.totalCount || 0
+    };
 }

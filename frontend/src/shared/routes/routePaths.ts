@@ -2,6 +2,7 @@ export const PATHS = {
     HOME: '/',
     LAPTOP: '/laptop/:laptopID',
     BRAND: '/brand/:brandID',
+    BRANDS: '/brands',
     SEARCH: '/search',
     LOGIN: '/login',
     REGISTER: '/register',

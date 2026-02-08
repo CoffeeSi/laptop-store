@@ -8,10 +8,11 @@ import { NotificationInfo } from "@/components/Notification/Notification";
 import { CartButtonSmall } from "@/components/CartButtonSmall/CartButtonSmall";
 import type { IFilters } from "../../types/filters.types";
 
-export function LaptopCards({filters}: {filters?: IFilters}) {
-  const { laptops, isLoading } = useLaptops(filters);
+export function LaptopCards({filters, page}: {filters?: IFilters; page?: number}) {
+  const { laptops, isLoading } = useLaptops(filters, page);
   const items = useCartStore(state => state.items);
   const addLaptop = useCartStore(state => state.addLaptop)
+
 
   if (isLoading) {
     return (
@@ -58,7 +59,7 @@ export function LaptopCards({filters}: {filters?: IFilters}) {
         <Card withBorder radius="md" className={classes.card}>
         <Link to={`/laptop/${laptop._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
           <Card.Section className={classes.imageSection}>
-            <Image src={laptop.imgUrl} alt={laptop.model_name} radius="md" />
+            <Image width={414} height={300} fit="contain" src={laptop.imgUrl} alt={laptop.model_name} radius="md" />
           </Card.Section>
 
           <Group justify="space-between" mt="md">
@@ -70,6 +71,18 @@ export function LaptopCards({filters}: {filters?: IFilters}) {
             </div>
           </Group>
         </Link>
+        
+          {laptop.brand_id && (
+            <Link 
+              to={`/brand/${laptop.brand_id._id}`} 
+              style={{ textDecoration: 'none' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Text size="sm" c="blue" mt={5}>
+                by {laptop.brand_id.brand_name}
+              </Text>
+            </Link>
+          )}
 
           {features.length > 0 ? (
             <Card.Section className={classes.section} mt="md">

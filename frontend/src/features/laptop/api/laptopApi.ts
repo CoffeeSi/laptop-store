@@ -1,10 +1,10 @@
 import apiClient from "@/shared/api/request.ts";
-import type { ILaptop } from "../types/laptop.types";
+import type { ILaptop, ILaptopsResponse } from "../types/laptop.types";
 import type { IFilters } from "../types/filters.types";
 
 export const laptopApi = {
     fetchLaptops: async (filters: URLSearchParams) => {        
-        const response = await apiClient.get<ILaptop[]>(`/laptops?${filters.toString()}`);
+        const response = await apiClient.get<ILaptopsResponse>(`/laptops?${filters.toString()}`);
         return response.data;
     }, 
     fetchLaptopById: async (id: string) => {

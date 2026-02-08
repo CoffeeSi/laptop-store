@@ -142,7 +142,17 @@ export const retrieveLaptops = async (dataSet)=>{
     if (Object.keys(ramFilter).length) {
         filter["specifications.ram"] = ramFilter
     }
-        
-    const filtered = await Laptop.find(filter).populate("brand_id", "brand_name").sort({stock_quantity : -1}).skip(skipCount).limit(laptopsOnPage)
-    return filtered
+    
+    const [filtered, totalCount] = await Promise.all([
+        Laptop.find(filter).populate("brand_id", "brand_name").sort({stock_quantity : -1}).skip(skipCount).limit(laptopsOnPage),
+        Laptop.countDocuments(filter)
+    ])
+    
+    return {
+        laptops: filtered,
+        totalCount,
+        currentPage: pageNumber,
+        totalPages: Math.ceil(totalCount / laptopsOnPage),
+        laptopsPerPage: laptopsOnPage
+    }
 }
