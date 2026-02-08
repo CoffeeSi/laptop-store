@@ -77,8 +77,8 @@ export const useCartStore = create<CartState>()(
             },
             getOrderItems: () => {
                 const state = get()
-                const items =  Object.entries(state.items).map(([laptop_id, item]) => ({
-                    laptop_id: laptop_id,
+                const items =  Object.values(state.items).map((item) => ({
+                    laptop_id: item.laptop,
                     quantity: item.quantity,
                     unit_price: item.laptop.price
                 })

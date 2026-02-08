@@ -51,7 +51,7 @@ function CartCards() {
               className={classes.quantity}
               placeholder="Quantity"
               value={quantity}
-              onChange={(value) => updateQuantity(laptop_id, value)}
+              onChange={(value) => updateQuantity(laptop._id, value)}
               max={laptop.stock_quantity}
               min={0}
               w={80}

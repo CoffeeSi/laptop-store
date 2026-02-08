@@ -52,7 +52,11 @@ export const getUserDataById = async(dataSet)=>{
     if (!mongoose.Types.ObjectId.isValid(id)){
         throw new Error("invalid id")
     }
+    if (id !== dataSet.requester_id){
+        throw new Error("unauthorized")
+    }
     const user = await User.findById(id)
+    user.password = undefined
     if (!user){
         throw new Error("user not found")
     }
