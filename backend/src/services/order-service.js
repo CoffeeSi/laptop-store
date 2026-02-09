@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
+import User from "../model/laptop-model.js"
 
 export const listOrdersByUserID = async (user_id) => {
     const orders = await Order.find({"user_id": user_id}).populate("items.laptop_id")
@@ -75,6 +76,24 @@ export const changeOrderStatus = async (dataSet)=>{
     if (!order){
         throw new Error("Order not found")
     }
+    const user = await User.findById(order.user_id).select("email")
+
+    if (!user || !user.email) {
+        throw new Error("User email not found")
+    }
+
+    await transporter.sendMail({
+        from: `"Laptop Store" <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: "Order status updated",
+        text: `Your order ${order._id} status has been changed to: ${status}`,
+        html: `
+        <h2>Order status updated</h2>
+        <p>Order ID: <b>${order._id}</b></p>
+        <p>New status: <b>${status}</b></p>
+        `,
+    })
+
     return order
 
 
