@@ -465,7 +465,7 @@ Content-Type: application/json
 }
 ```
 
-Status options: `"pending"`, `"shipping"`, `"delievered"`
+Status options: `"pending"`, `"shipping"`, `"delivered"`
 
 #### Refund Order Item
 ```http
