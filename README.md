@@ -634,157 +634,335 @@ Authorization: Bearer <token>
 
 ## 📸 Screenshots
 
-### Home Page
+> **Note:** To add screenshots, run the application and capture images of the following features:
+
+### 1. Home Page
 *The main landing page displaying featured laptops and navigation to browse the catalog.*
 
-![Home Page](./screenshots/homepage.png)
-
-The home page welcomes users with a clean, modern interface showcasing:
+**Features to capture:**
 - Navigation bar with search functionality
 - Featured laptop listings
 - Quick access to brands and categories
 - Login/Register options
+- Hero section with call-to-action
 
 ---
 
-### Laptop Catalog with Filters
+### 2. Laptop Catalog with Filters
 *Browse all available laptops with advanced filtering options.*
 
-![Laptop Catalog](./screenshots/catalog.png)
-
-The catalog page features:
-- Grid view of all laptops
-- Filter sidebar (by brand, CPU, GPU, RAM, price range)
-- Sort options (price, name, newest)
-- Pagination for easy navigation
-- Quick view of specifications and prices
+**Features to capture:**
+- Grid view of all laptops with cards showing:
+  - Laptop image
+  - Model name and brand
+  - Price
+  - Key specifications
+- Filter sidebar with options for:
+  - Brand selection
+  - CPU filter
+  - GPU filter
+  - RAM size filter
+  - Price range slider
+- Sort dropdown (price, name, newest)
+- Pagination controls
 
 ---
 
-### Laptop Detail Page
+### 3. Laptop Detail Page
 *Detailed view of a laptop with specifications, reviews, and purchase options.*
 
-![Laptop Detail](./screenshots/laptop-detail.png)
-
-The detail page displays:
-- High-resolution laptop images
-- Complete specifications (CPU, GPU, RAM, Storage)
-- Price and stock availability
-- Add to cart button
-- Customer reviews and ratings
-- Related products
+**Features to capture:**
+- Large laptop image/gallery
+- Model name and brand
+- Price and stock availability indicator
+- Complete specifications section:
+  - CPU details
+  - GPU information
+  - RAM capacity
+  - Storage type and size
+- Add to cart button with quantity selector
+- Customer reviews section with:
+  - Star ratings
+  - Review comments
+  - User names and dates
+- Related products carousel
 
 ---
 
-### Shopping Cart
+### 4. Search Results Page
+*Search functionality with results display.*
+
+**Features to capture:**
+- Search bar with query
+- Search results grid
+- Number of results found
+- Filter options applied to search
+- "No results" state (if applicable)
+
+---
+
+### 5. Shopping Cart
 *Review your selected items before checkout.*
 
-![Shopping Cart](./screenshots/cart.png)
-
-The shopping cart includes:
-- List of selected laptops
-- Quantity adjustments
-- Price calculations
-- Total amount
+**Features to capture:**
+- List of cart items showing:
+  - Laptop thumbnail
+  - Model name
+  - Unit price
+  - Quantity controls (+/-)
+  - Subtotal per item
+  - Remove button
+- Cart summary section:
+  - Subtotal
+  - Tax (if applicable)
+  - Total amount
 - Proceed to checkout button
-- Remove items option
+- Continue shopping link
+- Empty cart state
 
 ---
 
-### User Profile
+### 6. User Profile
 *Manage your account information and view order history.*
 
-![User Profile](./screenshots/profile.png)
-
-The profile page shows:
-- User information (name, email, phone, address)
-- Edit profile functionality
-- Order history
-- Review history
-- Account settings
+**Features to capture:**
+- User information display:
+  - Full name
+  - Email address
+  - Phone number
+  - Delivery address
+  - Account creation date
+  - User role badge
+- Edit profile button/form
+- Tabs or sections for:
+  - Personal information
+  - Order history preview
+  - Review history preview
+- Save changes button
 
 ---
 
-### Order History
+### 7. Order History
 *Track all your past and current orders.*
 
-![Order History](./screenshots/orders.png)
-
-Order history displays:
-- List of all orders
-- Order status (pending, shipping, delivered)
-- Order date and total amount
-- View order details
-- Request refund option
-
----
-
-### Admin Dashboard
-*Comprehensive admin panel for managing the store (Admin only).*
-
-![Admin Dashboard](./screenshots/admin-dashboard.png)
-
-The admin dashboard provides:
-- Key metrics and statistics
-- Total sales overview
-- Active orders count
-- Inventory status
-- Quick actions for management tasks
+**Features to capture:**
+- Table/list of orders showing:
+  - Order ID
+  - Order date
+  - Status badge (pending/shipping/delivered)
+  - Total amount
+  - Number of items
+  - View details button
+- Order detail modal/page:
+  - Ordered items list
+  - Shipping address
+  - Order timeline
+  - Refund option (if available)
+- Filter orders by status
+- Empty orders state
 
 ---
 
-### Admin - Laptop Management
-*Add, edit, or remove laptops from inventory (Admin only).*
+### 8. Product Reviews
+*View and submit reviews for laptops.*
 
-![Admin Laptop Management](./screenshots/admin-laptops.png)
-
-Laptop management features:
-- Add new laptop form
-- Edit existing laptops
-- Update stock quantities
-- Delete laptops
-- View all laptop details
-
----
-
-### Admin - Brand Management
-*Manage laptop brands (Admin only).*
-
-![Admin Brand Management](./screenshots/admin-brands.png)
-
-Brand management includes:
-- Add new brands
-- View brand statistics
-- Edit brand information
-- Delete brands
+**Features to capture:**
+- Review list showing:
+  - User avatar/initial
+  - User name
+  - Star rating
+  - Review date
+  - Review comment
+- Add review form (for logged-in users):
+  - Star rating selector
+  - Comment text area
+  - Submit button
+- Average rating display
+- Review count
+- Delete option (for own reviews)
 
 ---
 
-### Login Page
+### 9. Login Page
 *Secure authentication for users.*
 
-![Login Page](./screenshots/login.png)
-
-Login page features:
-- Email and password fields
-- Remember me option
+**Features to capture:**
+- Login form with:
+  - Email input field
+  - Password input field
+  - "Show password" toggle
+  - Remember me checkbox (if applicable)
+  - Login button
 - Link to registration page
-- Password recovery option
+- Forgot password link (if implemented)
+- Error messages (e.g., invalid credentials)
+- Success state (if showing validation)
 
 ---
 
-### Registration Page
+### 10. Registration Page
 *New user registration with validation.*
 
-![Registration Page](./screenshots/register.png)
+**Features to capture:**
+- Registration form with:
+  - Full name field
+  - Email field with validation
+  - Password field with strength indicator
+  - Confirm password field
+  - Phone number field
+  - Address text area
+  - Terms and conditions checkbox
+  - Register button
+- Link to login page
+- Field validation errors
+- Success message
 
-Registration form includes:
-- Full name input
-- Email validation
-- Password strength requirements
-- Phone number validation
-- Address field
-- Terms and conditions
+---
+
+### 11. Admin Dashboard (Admin Only)
+*Comprehensive admin panel for managing the store.*
+
+**Features to capture:**
+- Dashboard overview with cards showing:
+  - Total revenue
+  - Total orders count
+  - Active orders
+  - Total laptops in inventory
+  - Total registered users
+- Recent orders table preview
+- Quick action buttons:
+  - Add new laptop
+  - Add new brand
+  - View all orders
+- Navigation sidebar with admin sections
+- Statistics charts (if implemented)
+
+---
+
+### 12. Admin - Laptop Management (Admin Only)
+*Add, edit, or remove laptops from inventory.*
+
+**Features to capture:**
+- Laptop inventory table showing:
+  - Laptop thumbnail
+  - Model name
+  - Brand
+  - Price
+  - Stock quantity
+  - CPU/GPU/RAM specs
+  - Action buttons (Edit, Delete)
+- Add new laptop form with fields:
+  - Model name
+  - Brand dropdown
+  - Price input
+  - CPU input
+  - GPU input
+  - RAM input
+  - Storage input
+  - Stock quantity
+  - Submit button
+- Edit laptop modal
+- Delete confirmation dialog
+- Stock update interface
+
+---
+
+### 13. Admin - Order Management (Admin Only)
+*View and manage all customer orders.*
+
+**Features to capture:**
+- All orders table showing:
+  - Order ID
+  - Customer name
+  - Order date
+  - Status dropdown (pending/shipping/delivered)
+  - Total amount
+  - Items count
+  - Actions (View details, Update status)
+- Order details modal
+- Status update controls
+- Filter by status dropdown
+- Search orders functionality
+
+---
+
+### 14. Admin - Brand Management (Admin Only)
+*Manage laptop brands.*
+
+**Features to capture:**
+- Brands list/table showing:
+  - Brand name
+  - Country of origin
+  - Number of laptops
+  - Action buttons (View stats, Edit, Delete)
+- Add new brand form:
+  - Brand name input
+  - Country input
+  - Submit button
+- Brand statistics page showing:
+  - Total laptops for brand
+  - Average price
+  - Total stock
+  - Popular models
+- Delete confirmation dialog
+
+---
+
+### 15. Brands Page
+*Browse all available laptop brands.*
+
+**Features to capture:**
+- Grid of brand cards with:
+  - Brand logo or name
+  - Country flag/name
+  - Number of available laptops
+  - View brand link
+- Individual brand page showing:
+  - Brand information
+  - All laptops from the brand
+  - Brand statistics
+
+---
+
+### Instructions for Adding Screenshots:
+
+1. **Start the application:**
+   ```bash
+   # Terminal 1 - Backend
+   cd backend
+   npm run dev
+   
+   # Terminal 2 - Frontend
+   cd frontend
+   npm run dev
+   ```
+
+2. **Populate test data:**
+   - Create an admin account
+   - Add several brands
+   - Add multiple laptops with various specifications
+   - Create a regular user account
+   - Place some test orders
+   - Add reviews to products
+
+3. **Capture screenshots:**
+   - Use your browser's screenshot tool or a tool like Snipping Tool, Lightshot, or macOS Screenshot
+   - Save screenshots in the `screenshots/` directory
+   - Use descriptive filenames (e.g., `homepage.png`, `admin-dashboard.png`, `laptop-detail.png`)
+   - Recommended resolution: 1920x1080 or 1440x900
+   - Format: PNG for clarity
+
+4. **Update README:**
+   - Replace the feature descriptions above with actual screenshot links
+   - Use the format: `![Description](./screenshots/filename.png)`
+   - Add brief captions explaining what's shown
+
+5. **Example screenshot insertion:**
+   ```markdown
+   ### Home Page
+   ![Home Page](./screenshots/homepage.png)
+   *The main landing page displaying featured laptops with navigation and search.*
+   ```
 
 ---
 
