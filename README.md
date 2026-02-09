@@ -7,7 +7,7 @@ A full-stack e-commerce web application for buying and managing laptops. Built w
 - [Project Overview](#project-overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
+- [Requirements to boot](#prerequisites)
 - [Setup Instructions](#setup-instructions)
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
@@ -21,11 +21,10 @@ A full-stack e-commerce web application for buying and managing laptops. Built w
 - [Screenshots](#screenshots)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ##  Project Overview
 
-Laptop Store is a modern e-commerce platform that enables users to browse, search, and purchase laptops online. The application features a user-friendly interface for customers and a comprehensive admin panel for managing inventory, orders, and brands.
+Laptop Store is a modern laptop store that enables users to browse, search, and purchase laptops online. The application features a user-friendly interface for customers and a comprehensive admin panel for managing inventory, orders, and brands.
 
 ### Key Capabilities:
 - **Customer Portal**: Browse laptops, view detailed specifications, add to cart, place orders, and write reviews
@@ -152,6 +151,7 @@ Before you begin, you have to install packages below:
    Update the `.env` file:
    ```env
    VITE_BACKEND_URL=http://localhost:5000
+   VITE_FRONTEND_URL=http://localhost:5173
    ```
 
 4. **Start the development server:**
@@ -183,11 +183,11 @@ POST /api/auth/register
 Content-Type: application/json
 
 {
-  "full_name": "John Doe",
-  "email": "john@example.com",
+  "full_name": "Denis Li",
+  "email": "you@example.com",
   "password": "password123",
   "phone": "+1234567890",
-  "address": "123 Main St, City, Country"
+  "address": "Astana, Kazakhstan"
 }
 ```
 
@@ -204,7 +204,7 @@ POST /api/auth/login
 Content-Type: application/json
 
 {
-  "email": "john@example.com",
+  "email": "you@example.com",
   "password": "password123"
 }
 ```
@@ -507,7 +507,7 @@ GET /api/reviews/laptop/:laptopId
     "_id": "507f1f77bcf86cd799439015",
     "user_id": {
       "_id": "507f1f77bcf86cd799439010",
-      "full_name": "John Doe"
+      "full_name": "Yevgeniy Averyanov"
     },
     "laptop_id": "507f1f77bcf86cd799439011",
     "rating": 5,
@@ -535,12 +535,12 @@ Authorization: Bearer <token>
 ```json
 {
   "_id": "507f1f77bcf86cd799439010",
-  "full_name": "John Doe",
-  "email": "john@example.com",
+  "full_name": "Yevgeniy Averyanov",
+  "email": "yevgeniy@example.com",
   "phone": "+1234567890",
-  "address": "123 Main St, City, Country",
+  "address": "Astana, Kazakhstan",
   "role": "customer",
-  "created_at": "2024-01-01T00:00:00.000Z"
+  "created_at": "2026-02-09T00:00:00.000Z"
 }
 ```
 
@@ -563,9 +563,9 @@ Authorization: Bearer <token>
 Content-Type: application/json
 
 {
-  "full_name": "John Updated",
+  "full_name": "New name",
   "phone": "+1234567891",
-  "address": "456 New St, City, Country"
+  "address": "Astana, Kazakhstan"
 }
 ```
 

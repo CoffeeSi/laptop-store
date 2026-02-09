@@ -1,4 +1,4 @@
-import { Group, Text, Table, ActionIcon, Menu, Alert, Button } from "@mantine/core";
+import { Group, Text, Table, ActionIcon, Menu, Alert, Button, Badge } from "@mantine/core";
 import { IconDots, IconCreditCardRefund } from "@tabler/icons-react";
 import { useOrders } from "../../hooks/useOrders";
 import { useRefundItem } from "../../hooks/useRefund";
@@ -79,6 +79,9 @@ export function OrdersStack() {
         <Text fz="xs" c="dimmed">
           Order
         </Text>
+      </Table.Td>
+      <Table.Td>
+        <Badge >{order.status}</Badge>
       </Table.Td>
       <Table.Td>
         <Text fz="sm">{new Intl.NumberFormat('ru-KZ', {

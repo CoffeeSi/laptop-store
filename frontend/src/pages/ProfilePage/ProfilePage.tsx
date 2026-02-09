@@ -10,10 +10,10 @@ function ProfilePage() {
     <Header />
       <Grid className={classes.main}>
         
-        <GridCol span={{base: 12, md: 8}}>
+        <GridCol span={{base: 12, md: 6}}>
           <UserProfile />
         </GridCol>
-        <GridCol span={{base: 12, md: 4}}>
+        <GridCol span={{base: 12, md: 6}}>
           <Card withBorder p={20}>
             <Title order={2} mb={20} ml={10}>Your orders</Title>
             <OrdersStack />
