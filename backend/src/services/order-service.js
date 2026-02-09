@@ -1,6 +1,8 @@
 import mongoose from "mongoose"
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
+import User from "../model/laptop-model.js"
+import {transporter } from "../utils/nodemailer.js"
 
 export const listOrdersByUserID = async (user_id) => {
     const orders = await Order.find({"user_id": user_id}).populate("items.laptop_id")
@@ -71,10 +73,27 @@ export const changeOrderStatus = async (dataSet)=>{
     if (!mongoose.Types.ObjectId.isValid(order_id)){
             throw new Error("invalid id")
         }
-    const order = await Order.findByIdAndUpdate(order_id, {status},{new : true, runValidators : true})
+    const order = await Order.findByIdAndUpdate(order_id, {status},{new : true, runValidators : true}).populate("user_id", "email")
     if (!order){
         throw new Error("Order not found")
     }
+    
+    if (!order.user_id || !order.user_id.email) {
+        throw new Error("User email not found")
+    }
+
+    await transporter.sendMail({
+        from: `"Laptop Store" <${process.env.SMTP_USER}>`,
+        to: order.user_id.email,
+        subject: "Order status updated",
+        text: `Your order ${order._id} status has been changed to: ${status}`,
+        html: `
+        <h2>Order status updated</h2>
+        <p>Order ID: <b>${order._id}</b></p>
+        <p>New status: <b>${status}</b></p>
+        `,
+    })
+
     return order
 
 
