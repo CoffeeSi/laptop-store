@@ -1,4 +1,5 @@
 import { registerUserService, loginUserService } from '../services/auth-service.js';
+import jwt from 'jsonwebtoken';
 
 async function registerUser(req, res) {
     const { full_name, email, password, phone, address } = req.body;
@@ -28,58 +29,59 @@ async function registerUser(req, res) {
 async function loginUser(req, res) {
     try {
         const { email, password } = req.body;
-
         const user = await loginUserService({ email, password });
+        
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        req.session.isLoggedIn = true;
-        req.session.userID = user._id.toString();
-        req.session.role = user.role;
+        const token = jwt.sign(
+            { userID: user._id.toString(), role: user.role },
+            process.env.SECRET_KEY,
+            { expiresIn: '7d' }
+        );
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
         
         return res.status(200).json({ 
             message: 'Login successful',
+            token,
             userID: user._id.toString(),
             role: user.role
         });
     } catch (error) {
-        console.error('Login error:', error);
-        return res.status(500).json({ 
-            message: 'Error during login',
-            error: error.message 
-        });
+        return res.status(500).json({message: 'Error during login'});
     }
 }
 
 async function logoutUser(req, res) {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error logging out' });
-        }
-        res.clearCookie('session-id');
-        res.status(200).json({ message: 'Logout successful' });
-    })
+    res.clearCookie('token');
+    res.status(200).json({ message: 'Logout successful' });
 }
 
 async function authStatus(req, res) {
     try {
-        if (req.session && req.session.isLoggedIn) {
-            return res.status(200).json({ 
-                isLoggedIn: true, 
-                userID: req.session.userID, 
-                role: req.session.role 
-            });
-        } else {
+        const token = req.cookies?.token || req.headers.authorization?.split(' ')[1];
+
+        if (!token) {
             return res.status(200).json({ isLoggedIn: false });
-        }
+        }        
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        return res.status(200).json({ 
+            isLoggedIn: true, 
+            userID: decoded.userID, 
+            role: decoded.role 
+        });
     } catch (error) {
         console.error('Auth status error:', error);
-        return res.status(500).json({ 
-            message: 'Error checking auth status',
-            error: error.message 
-        });
+        return res.status(200).json({ isLoggedIn: false });
     }
 }
 

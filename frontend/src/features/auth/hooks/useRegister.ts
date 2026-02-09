@@ -14,8 +14,8 @@ export const useRegister = () => {
         setLoading(true);
 
         try {
-            const response = await authApi.register(payload);   
-            setUser(response.data.userID, response.data.role);
+            const data = await authApi.register(payload);   
+            setUser(data.userID, data.role);
         } catch (err: unknown) {
             const axiosError = err as AxiosError<{ message?: string }>;
             const message = axiosError.response?.data?.message || 'Registration failed';

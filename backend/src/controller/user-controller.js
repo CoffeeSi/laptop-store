@@ -35,7 +35,8 @@ export const patchUser = async(req,res,next)=>{
 
 export const getUserById = async(req,res,next)=>{
     try{
-        const data = await getUserDataById({user_id : req.params.id, requester_id : req.session.userID})
+        const requesterId = req.user?.userID || req.session?.userID;
+        const data = await getUserDataById({user_id : req.params.id, requester_id : requesterId})
         return res.status(200).json(data)
 
     }catch(err){

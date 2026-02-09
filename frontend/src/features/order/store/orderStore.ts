@@ -24,16 +24,10 @@ export const useOrderStore = create(
                     orderData: { ...state.orderData, ...data}
                 })),
             submitOrder: async (data: IOrderSubmit) => {
-                get().updateOrder({
-                    ...data,
-                    status: "pending",
-                    order_date: new Date(),
-                });
-                const order = get().orderData;
-                if (order.items.length === 0) {
+                if (!data.items || data.items.length === 0) {
                     throw new Error("Order is empty");
                 }
-                const response = await orderApi.createOrder(order)
+                const response = await orderApi.createOrder(data)
                 if (!response.status || response.status !== 201) {
                     throw new Error("Failed to submit order");
                 }

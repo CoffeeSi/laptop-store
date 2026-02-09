@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ILaptop } from '@/features/laptop/types/laptop.types';
-import type { IOrderItem } from '@/features/order/types/order.types';
+import type { IOrderItemSubmit } from '@/features/order/types/order.types';
 
 export interface CartItem {
     laptop: ILaptop;
@@ -15,7 +15,7 @@ interface CartState {
     clearCart: () => void;
     getTotalCost: () => number;
     getTotalItems: () => number;
-    getOrderItems: () => IOrderItem[];
+    getOrderItems: () => IOrderItemSubmit[];
 }
 
 export const useCartStore = create<CartState>()(
@@ -78,9 +78,8 @@ export const useCartStore = create<CartState>()(
             getOrderItems: () => {
                 const state = get()
                 const items =  Object.values(state.items).map((item) => ({
-                    laptop_id: item.laptop,
-                    quantity: item.quantity,
-                    unit_price: item.laptop.price
+                    laptop_id: item.laptop._id,
+                    quantity: item.quantity
                 })
                 )
                 return items;

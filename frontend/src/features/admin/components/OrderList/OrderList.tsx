@@ -87,7 +87,7 @@ export const OrderList = () => {
                   </Text>
                 ))}
               </Table.Td>
-              <Table.Td>${order.total_price}</Table.Td>
+              <Table.Td>{new Intl.NumberFormat('ru-KZ', { style: 'currency', currency: 'KZT' }).format(order.total_price)}</Table.Td>
               <Table.Td>
                 <Badge color={getStatusColor(order.status)}>
                   {order.status}

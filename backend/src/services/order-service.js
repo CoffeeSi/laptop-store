@@ -2,24 +2,24 @@ import mongoose from "mongoose"
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
 
-export const listOrders = async (user_id) => {
-    if (user_id === null) {
-        const orders = await Order.find()
-            .populate("items.laptop_id", "model_name")
-            .populate("user_id", "full_name email");
-        return orders;
-    }
-    
+export const listOrdersByUserID = async (user_id) => {
     const orders = await Order.find({"user_id": user_id}).populate("items.laptop_id")
     return orders
+}
+
+export const listOrders = async () => {
+    const orders = await Order.find()
+        .populate("items.laptop_id", "model_name")
+        .populate("user_id", "full_name email");
+    return orders;
 }
 
 export const createOrder = async (dataSet) =>{
 
     const {items,user_id} = dataSet
     if (!mongoose.Types.ObjectId.isValid(user_id)){
-            throw new Error("invalid id")
-        }
+        throw new Error("invalid id")
+    }
     if (!items || items.length === 0) {
       throw new Error("order items required")
     }

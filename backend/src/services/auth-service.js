@@ -27,6 +27,7 @@ async function loginUserService({ email, password }) {
     }
 
     const isValid = await comparePassword(user.password, password);
+    
     if (!isValid) {
         return null;
     }

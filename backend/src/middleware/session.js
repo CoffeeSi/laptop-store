@@ -1,8 +1,7 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import session from "express-session";
 import MongoStore from 'connect-mongo';
+import { config } from "dotenv";
+config()
 
 function sessionMiddleware() {
     return session({
@@ -18,8 +17,8 @@ function sessionMiddleware() {
 
         cookie: {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
+            secure: true,
+            sameSite: 'none',
             maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
         }
     })

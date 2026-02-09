@@ -3,7 +3,7 @@ import type { IAdminOrder, IUpdateOrderStatusPayload } from '../types/admin.type
 
 export const adminOrderApi = {
     getAllOrders: async (): Promise<IAdminOrder[]> => {
-        const response = await apiClient.get('/orders');
+        const response = await apiClient.get('/orders/all');
         return response.data;
     },
     
