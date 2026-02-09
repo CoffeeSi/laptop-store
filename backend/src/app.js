@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import sessionMiddleware from './middleware/session.js';
+import cookieParser from 'cookie-parser';
+import jwtMiddleware from './middleware/jwt.js';
 import review_router from './routes/review-router.js';
 import auth_router from './routes/auth-router.js';
 import laptop_router from './routes/laptop-router.js';
@@ -15,8 +16,9 @@ const app = express()
 app.set('trust proxy', 1)
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}))
-app.use(sessionMiddleware());
+app.use(jwtMiddleware());
 
 app.use('/api/auth', auth_router);
 app.use('/api/laptops', laptop_router);

@@ -15,8 +15,11 @@ export interface IOrderItem {
     unit_price: number
 }
 
+export interface IOrderItemSubmit {
+    laptop_id: string,
+    quantity: number
+}
+
 export interface IOrderSubmit {
-    user_id: string | null,
-    items: IOrderItem[],
-    total_price: number
+    items: IOrderItemSubmit[],
 }

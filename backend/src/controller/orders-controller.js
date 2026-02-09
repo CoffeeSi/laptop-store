@@ -1,11 +1,11 @@
-import { listOrders, createOrder , changeOrderStatus, refundLaptop} from "../services/order-service.js"
+import { listOrders, createOrder , changeOrderStatus, refundLaptop, listOrdersByUserID} from "../services/order-service.js"
 import { createOrderDTO } from "./dto/create-order.js"
 import * as z from "zod"
 
 export const addOrder = async (req, res, next) => {
   try {
     const dto = await createOrderDTO.parseAsync(req.body)
-    const order = await createOrder({items : dto.items, user_id : req.user.id})
+    const order = await createOrder({items : dto.items, user_id : req.user.userID})
 
     res.status(201).json(order)
 
@@ -84,10 +84,10 @@ export const patchOrderItems = async(req,res,next)=>{
 
 export const getOrdersByUserID = async (req, res, next) => {
   try {
-    const user_id = req.session.userID;
-    const role = req.session.role;
+    const user_id = req.user?.userID || req.session?.userID;
+    const role = req.user?.role || req.session?.role;
     
-    const orders = await getOrdersByUserID(user_id)
+    const orders = await listOrdersByUserID(user_id)
     res.json(orders)
   } catch (err) {
     next(err)
@@ -96,8 +96,8 @@ export const getOrdersByUserID = async (req, res, next) => {
 
 export const getAllOrders = async (req, res, next) => {
   try {
-    const user_id = req.session.userID;
-    const role = req.session.role;
+    const user_id = req.user?.userID || req.session?.userID;
+    const role = req.user?.role || req.session?.role;
     if (role !== "admin"){
       return res.status(403).json({message : "Forbidden"})
     }

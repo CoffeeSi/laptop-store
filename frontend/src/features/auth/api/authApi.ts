@@ -10,16 +10,16 @@ export const authApi = {
     
     register: async (userData: IRegisterPayload) => {
         const response = await apiClient.post('/auth/register', userData);
-        return response;
+        return response.data;
     },
     
     logout: async () => {
-        const response = await apiClient.post('/auth/logout', {}, {withCredentials: true});
+        const response = await apiClient.post('/auth/logout', {});
         return response.data;
     },
 
     getAuthStatus: async () => {
-        const response = await apiClient.get('/auth/status', {withCredentials: true});        
+        const response = await apiClient.get('/auth/status');        
         return response.data;
     }
 };

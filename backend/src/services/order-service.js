@@ -2,12 +2,12 @@ import mongoose from "mongoose"
 import Order from "../model/order-model.js"
 import Laptop from "../model/laptop-model.js"
 
-export const getOrdersByUserID = async (user_id) => {
+export const listOrdersByUserID = async (user_id) => {
     const orders = await Order.find({"user_id": user_id}).populate("items.laptop_id")
     return orders
 }
 
-export const listOrders = async (user_id) => {
+export const listOrders = async () => {
     const orders = await Order.find()
         .populate("items.laptop_id", "model_name")
         .populate("user_id", "full_name email");

@@ -5,7 +5,7 @@ export const addReview = async (req, res, next) => {
   try {
 
     const dto = await createReviewDTO.parseAsync(req.body)
-    const review = await createReview({dto : dto, user_id : req.user.id})
+    const review = await createReview({dto : dto, user_id : req.user.userID})
     res.status(201).json(review)
 
   } catch (err) {
@@ -47,7 +47,7 @@ export const deleteReview = async(req,res,next)=>{
 
   try{
 
-    const removed = await removeReview({review_id: req.params.id,role: req.user.role,user_id: req.user.id });
+    const removed = await removeReview({review_id: req.params.id,role: req.user.role,user_id: req.user.userID });
     res.status(200).json(removed)
 
   }catch(err){

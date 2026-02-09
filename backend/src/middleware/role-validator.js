@@ -1,10 +1,11 @@
+import jwt from 'jsonwebtoken';
+import { config } from 'dotenv';
+
+config();
+
 export const protect = (req, res, next) => {
-    if (!req.session.isLoggedIn || !req.session.userID) {
+    if (!req.cookies?.token && !req.headers.authorization) {
         return res.status(401).json({ message: "Enter in the system" });
-    }
-    req.user = {
-        id: req.session.userID,
-        role: req.session.role
     }
     next();
 };
@@ -12,7 +13,9 @@ export const protect = (req, res, next) => {
 
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.session.role)) {
+        const role = req.user?.role;
+        
+        if (!role || !roles.includes(role)) {
             return res.status(403).json({ 
                 message: "Not enough rights" 
             });

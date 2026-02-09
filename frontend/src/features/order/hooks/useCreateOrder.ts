@@ -17,13 +17,10 @@ export const useOrder = () => {
 
         const state = useCartStore.getState();
         const orderItems = state.getOrderItems();
-        const totalCost = state.getTotalCost();
 
         const orderSubmit: IOrderSubmit = {
-            user_id: user_id,
             items: orderItems,
-            total_price: totalCost
-        }
+        } 
         try {
             await submitOrder(orderSubmit);
             clearCart();
