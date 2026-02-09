@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { transporter } from "../backend/src/utils/nodemailer.js"
 dotenv.config();
 
 import app from './src/app.js';
