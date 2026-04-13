@@ -8,6 +8,7 @@ import laptop_router from './routes/laptop-router.js';
 import order_router from './routes/order-router.js';
 import user_router from './routes/user-router.js';
 import brand_router from './routes/brand-router.js';
+import metrics_router from './routes/metrics-router.js';
 import { config } from 'dotenv';
 config()
 
@@ -16,7 +17,14 @@ const app = express()
 app.set('trust proxy', 1)
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}))
+app.use(cors({
+    origin: [
+        "http://localhost:4173",
+        "http://localhost:5173",
+        process.env.FRONTEND_URL
+    ], 
+    credentials: true
+}))
 app.use(jwtMiddleware());
 
 app.use('/api/auth', auth_router);
@@ -25,5 +33,6 @@ app.use('/api/orders', order_router);
 app.use('/api/users', user_router);
 app.use('/api/reviews',review_router)
 app.use('/api/brands', brand_router)
+app.use('/metrics', metrics_router);
 
 export default app;

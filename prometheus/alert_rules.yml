@@ -1,0 +1,22 @@
+groups:
+- name: availability_alerts
+  rules:
+
+  - alert: ServiceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Server is DOWN on {{ $labels.instance }}"
+      description: "Service is down"
+
+  - alert: HighLatencyWarning
+    expr: node_nodejs_eventloop_lag_p99_seconds > 0.05
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High Latency on {{ $labels.instance }}"
+      description: "P99 Event Loop lag is {{ $value }}s."
+      

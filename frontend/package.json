@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix",
     "preview": "vite preview",
-    "host": "vite preview --host --port 80"
+    "host": "vite preview --host --port 4173"
   },
   "dependencies": {
     "@mantine/core": "^8.3.14",
