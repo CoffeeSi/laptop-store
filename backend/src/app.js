@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import jwtMiddleware from './middleware/jwt.js';
+import { metricsMiddleware, register } from './middleware/metrics.js';
 import review_router from './routes/review-router.js';
 import auth_router from './routes/auth-router.js';
 import laptop_router from './routes/laptop-router.js';
@@ -18,6 +19,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}))
 app.use(jwtMiddleware());
+app.use(metricsMiddleware);
+
+// Prometheus metrics endpoint
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+});
 
 app.use('/api/auth', auth_router);
 app.use('/api/laptops', laptop_router);

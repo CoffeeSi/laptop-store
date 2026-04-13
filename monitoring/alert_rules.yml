@@ -1,0 +1,82 @@
+groups:
+  - name: laptop_store_slo_alerts
+    interval: 30s
+    rules:
+      # ──────────────────────────────────────────────────────────────
+      # SLI 1: API Request Success Rate  (SLO: 99.5%)
+      # Warning: error rate > 1% for 2 minutes
+      # ──────────────────────────────────────────────────────────────
+      - alert: APIHighErrorRateWarning
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total[5m]))
+          ) > 0.01
+        for: 2m
+        labels:
+          severity: warning
+          slo: api_success_rate
+        annotations:
+          summary: "API error rate above 1% (warning threshold)"
+          description: >
+            The API error rate is {{ $value | humanizePercentage }} which exceeds
+            the 1% warning threshold. SLO target is 99.5% success rate.
+            Current burn rate may exhaust the monthly error budget early.
+
+      # ──────────────────────────────────────────────────────────────
+      # Critical: error rate > 5% for 1 minute
+      # ──────────────────────────────────────────────────────────────
+      - alert: APIHighErrorRateCritical
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total[5m]))
+          ) > 0.05
+        for: 1m
+        labels:
+          severity: critical
+          slo: api_success_rate
+        annotations:
+          summary: "API error rate above 5% (critical threshold)"
+          description: >
+            The API error rate is {{ $value | humanizePercentage }} which exceeds
+            the 5% critical threshold. SLO target is 99.5% success rate.
+            Immediate action required — error budget is burning rapidly.
+
+      # ──────────────────────────────────────────────────────────────
+      # SLI 2: Page Load Performance  (SLO: 99% requests < 2 s)
+      # Warning: p95 latency > 1.5 s for 5 minutes
+      # ──────────────────────────────────────────────────────────────
+      - alert: APIHighLatencyWarning
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(http_request_duration_ms_bucket[5m])) by (le)
+          ) > 1500
+        for: 5m
+        labels:
+          severity: warning
+          slo: page_load_performance
+        annotations:
+          summary: "API p95 latency above 1.5 s (warning)"
+          description: >
+            The p95 request latency is {{ $value | humanize }}ms, exceeding the
+            1 500 ms warning threshold. SLO target: 99% of requests < 2 000 ms.
+
+      # Critical: p95 latency > 2 s for 2 minutes
+      - alert: APIHighLatencyCritical
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(http_request_duration_ms_bucket[5m])) by (le)
+          ) > 2000
+        for: 2m
+        labels:
+          severity: critical
+          slo: page_load_performance
+        annotations:
+          summary: "API p95 latency above 2 s — SLO breach (critical)"
+          description: >
+            The p95 request latency is {{ $value | humanize }}ms, exceeding the
+            2 000 ms SLO target. Page Load Performance SLO (99%) is actively
+            being breached. Investigate backend bottlenecks immediately.

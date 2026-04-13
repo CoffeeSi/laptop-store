@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: "Laptop Store Dashboards"
+    orgId: 1
+    folder: "Laptop Store"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/dashboards
