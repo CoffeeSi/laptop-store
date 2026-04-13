@@ -11,6 +11,10 @@ A full-stack e-commerce web application for buying and managing laptops. Built w
 - [Setup Instructions](#setup-instructions)
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
+- [🐳 Docker / SRE Observability Stack](#-docker--sre-observability-stack)
+  - [Quick Start (Docker Compose)](#quick-start-docker-compose)
+  - [Service URLs](#service-urls)
+  - [Docker Swarm (Bonus)](#docker-swarm-bonus)
 - [API Documentation](#api-documentation)
   - [Authentication](#authentication)
   - [Laptops](#laptops)
@@ -170,6 +174,62 @@ Before you begin, you have to install packages below:
    ```bash
    npm run preview
    ```
+
+## 🐳 Docker / SRE Observability Stack
+
+The project includes a complete containerized deployment with an SRE observability stack (Prometheus + Grafana + AlertManager + Node Exporter).
+
+### Quick Start (Docker Compose)
+
+```bash
+# 1. Copy and configure environment variables
+cp .env.example .env
+# Edit .env and set SECRET_KEY and any SMTP settings
+
+# 2. Start the full stack
+docker compose up --build -d
+
+# 3. Verify all services are running
+docker compose ps
+```
+
+### Service URLs
+
+| Service       | URL                          | Description                        |
+|---------------|------------------------------|------------------------------------|
+| Frontend      | http://localhost:5173        | React web application              |
+| Backend API   | http://localhost:3000/api    | Node.js/Express REST API           |
+| Metrics       | http://localhost:3000/metrics| Prometheus metrics endpoint        |
+| Prometheus    | http://localhost:9090        | Metrics collection & alerting      |
+| Grafana       | http://localhost:3001        | Dashboards (admin / admin)         |
+| AlertManager  | http://localhost:9093        | Alert routing                      |
+| Node Exporter | http://localhost:9100        | Host system metrics                |
+
+The Grafana dashboard (**Laptop Store – SRE Observability**) is automatically provisioned and includes:
+- **SLO gauges**: API Success Rate (99.5% target) and Page Load Performance (99% target)
+- **Golden Signals**: Latency (p50/p95/p99), Traffic (RPS by route), Errors (5xx rate), Saturation (CPU/memory/disk)
+- **Business Metrics**: Active users, order rate, cart operations
+
+### Docker Swarm (Bonus)
+
+Build images first, then deploy to a Swarm cluster:
+
+```bash
+# Build images
+docker build -t laptop-store-backend:latest ./backend
+docker build -t laptop-store-frontend:latest ./frontend
+
+# Initialise Swarm (single node)
+docker swarm init
+
+# Deploy the stack
+docker stack deploy -c docker-stack.yml laptop-store
+
+# Verify replicas
+docker stack services laptop-store
+```
+
+See [`docs/slo-documentation.md`](./docs/slo-documentation.md) for full SLI/SLO definitions and error budget calculations.
 
 ##  API Documentation
 
@@ -757,12 +817,14 @@ laptop-store/
 │   │   ├── controller/      # Request handlers
 │   │   │   └── dto/        # Data Transfer Objects
 │   │   ├── middleware/      # Authentication & validation middleware
+│   │   │   └── metrics.js  # Prometheus metrics middleware
 │   │   ├── model/          # Mongoose schemas
 │   │   ├── routes/         # API routes
 │   │   ├── services/       # Business logic
 │   │   ├── utils/          # Utility functions
 │   │   └── app.js          # Express app configuration
 │   ├── server.js           # Server entry point
+│   ├── Dockerfile
 │   ├── package.json
 │   └── .env.example
 │
@@ -776,11 +838,29 @@ laptop-store/
 │   │   └── main.tsx        # Application entry point
 │   ├── index.html
 │   ├── package.json
+│   ├── nginx.conf          # Nginx config for production container
 │   ├── vite.config.ts
+│   ├── Dockerfile
 │   └── .env.example
 │
+├── monitoring/
+│   ├── prometheus.yml       # Prometheus scrape configuration
+│   ├── alert_rules.yml      # SLO-based alerting rules
+│   ├── alertmanager.yml     # AlertManager routing configuration
+│   └── grafana/
+│       ├── provisioning/
+│       │   ├── datasources/ # Auto-provisioned Prometheus datasource
+│       │   └── dashboards/  # Dashboard provider config
+│       └── dashboards/
+│           └── laptop-store-dashboard.json  # Golden Signals dashboard
+│
+├── docs/
+│   └── slo-documentation.md # SLI/SLO definitions + error budget math
+│
+├── docker-compose.yml       # Full observability stack
+├── docker-stack.yml         # Docker Swarm deployment (BONUS)
+├── .env.example             # Root environment template
 └── README.md
-```
 
 
 
